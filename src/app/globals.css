@@ -1,0 +1,323 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --animate-hide: hide 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-down-and-fade: slideDownAndFade 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-left-and-fade: slideLeftAndFade 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-up-and-fade: slideUpAndFade 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-right-and-fade: slideRightAndFade 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-accordion-open: accordionOpen 150ms cubic-bezier(0.87, 0, 0.13, 1);
+  --animate-accordion-close: accordionClose 150ms cubic-bezier(0.87, 0, 0.13, 1);
+  --animate-dialog-overlay-show: dialogOverlayShow 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-dialog-content-show: dialogContentShow 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-drawer-slide-left-and-fade: drawerSlideLeftAndFade 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-drawer-slide-right-and-fade: drawerSlideRightAndFade 150ms ease-in;
+
+  @keyframes hide {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes slideDownAndFade {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes slideLeftAndFade {
+    from {
+      opacity: 0;
+      transform: translateX(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes slideUpAndFade {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes slideRightAndFade {
+    from {
+      opacity: 0;
+      transform: translateX(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes accordionOpen {
+    from {
+      height: 0px;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordionClose {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0px;
+    }
+  }
+  @keyframes dialogOverlayShow {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes dialogContentShow {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -45%) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+  @keyframes drawerSlideLeftAndFade {
+    from {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes drawerSlideRightAndFade {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+  }
+}
+
+@theme {
+  /* Primary – deep blue (#2b3990) */
+  --color-primary-50: oklch(96.00% 0.020 271.12);
+  --color-primary-100: oklch(91.00% 0.040 271.12);
+  --color-primary-200: oklch(82.00% 0.070 271.12);
+  --color-primary-300: oklch(70.00% 0.100 271.12);
+  --color-primary-400: oklch(55.00% 0.130 271.12);
+  --color-primary-500: oklch(38.89% 0.144 271.12);
+  --color-primary-600: oklch(33.00% 0.135 271.12);
+  --color-primary-700: oklch(27.00% 0.120 271.12);
+  --color-primary-800: oklch(21.00% 0.090 271.12);
+  --color-primary-900: oklch(16.00% 0.060 271.12);
+  --color-primary-950: oklch(12.00% 0.040 271.12);
+
+  /* Secondary – espresso (#1c110a) */
+  --color-secondary-50: oklch(85.52% 0.013 53.36);
+  --color-secondary-100: oklch(83.62% 0.024 53.36);
+  --color-secondary-200: oklch(79.95% 0.049 53.36);
+  --color-secondary-300: oklch(76.19% 0.071 53.36);
+  --color-secondary-400: oklch(72.61% 0.091 53.36);
+  --color-secondary-500: oklch(69.39% 0.106 53.36);
+  --color-secondary-600: oklch(58.69% 0.088 53.36);
+  --color-secondary-700: oklch(47.70% 0.071 53.36);
+  --color-secondary-800: oklch(36.09% 0.052 53.36);
+  --color-secondary-900: oklch(23.12% 0.029 53.36);
+  --color-secondary-950: oklch(19.02% 0.023 53.36);
+
+  --color-primary-foreground: oklch(100% 0 0);
+  --color-secondary-foreground: oklch(100% 0 0);
+
+  /* Accent – soft blue companion to #2b3990; keeps gold-* utility names for compatibility */
+  --color-gold-50: oklch(97.00% 0.010 271.12);
+  --color-gold-100: oklch(93.00% 0.020 271.12);
+  --color-gold-200: oklch(87.00% 0.035 271.12);
+  --color-gold-300: oklch(80.00% 0.050 271.12);
+  --color-gold-400: oklch(72.00% 0.060 271.12);
+  --color-gold-500: oklch(65.00% 0.070 271.12);
+  --color-gold-600: oklch(55.00% 0.070 271.12);
+  --color-gold-700: oklch(45.00% 0.060 271.12);
+  --color-gold-800: oklch(35.00% 0.050 271.12);
+  --color-gold-900: oklch(24.00% 0.035 271.12);
+  --color-gold-950: oklch(18.00% 0.025 271.12);
+  --color-gold-foreground: oklch(100% 0 0);
+
+  /* Named aliases – same deep blue as primary (#2b3990) */
+  --color-royal-purple-50: oklch(96.00% 0.020 271.12);
+  --color-royal-purple-100: oklch(91.00% 0.040 271.12);
+  --color-royal-purple-200: oklch(82.00% 0.070 271.12);
+  --color-royal-purple-300: oklch(70.00% 0.100 271.12);
+  --color-royal-purple-400: oklch(55.00% 0.130 271.12);
+  --color-royal-purple-500: oklch(38.89% 0.144 271.12);
+  --color-royal-purple-600: oklch(33.00% 0.135 271.12);
+  --color-royal-purple-700: oklch(27.00% 0.120 271.12);
+  --color-royal-purple-800: oklch(21.00% 0.090 271.12);
+  --color-royal-purple-900: oklch(16.00% 0.060 271.12);
+  --color-royal-purple-950: oklch(12.00% 0.040 271.12);
+
+  --color-wisteria-50: oklch(97.00% 0.010 271.12);
+  --color-wisteria-100: oklch(93.00% 0.020 271.12);
+  --color-wisteria-200: oklch(87.00% 0.035 271.12);
+  --color-wisteria-300: oklch(80.00% 0.050 271.12);
+  --color-wisteria-400: oklch(72.00% 0.060 271.12);
+  --color-wisteria-500: oklch(65.00% 0.070 271.12);
+  --color-wisteria-600: oklch(55.00% 0.070 271.12);
+  --color-wisteria-700: oklch(45.00% 0.060 271.12);
+  --color-wisteria-800: oklch(35.00% 0.050 271.12);
+  --color-wisteria-900: oklch(24.00% 0.035 271.12);
+  --color-wisteria-950: oklch(18.00% 0.025 271.12);
+
+  --color-espresso-50: oklch(85.52% 0.013 53.36);
+  --color-espresso-100: oklch(83.62% 0.024 53.36);
+  --color-espresso-200: oklch(79.95% 0.049 53.36);
+  --color-espresso-300: oklch(76.19% 0.071 53.36);
+  --color-espresso-400: oklch(72.61% 0.091 53.36);
+  --color-espresso-500: oklch(69.39% 0.106 53.36);
+  --color-espresso-600: oklch(58.69% 0.088 53.36);
+  --color-espresso-700: oklch(47.70% 0.071 53.36);
+  --color-espresso-800: oklch(36.09% 0.052 53.36);
+  --color-espresso-900: oklch(23.12% 0.029 53.36);
+  --color-espresso-950: oklch(19.02% 0.023 53.36);
+
+  --color-cream-50: oklch(96.67% 0.014 92.98);
+  --color-cream-100: oklch(94.53% 0.026 92.98);
+  --color-cream-200: oklch(90.38% 0.053 92.98);
+  --color-cream-300: oklch(86.13% 0.077 92.98);
+  --color-cream-400: oklch(82.08% 0.098 92.98);
+  --color-cream-500: oklch(78.44% 0.114 92.98);
+  --color-cream-600: oklch(66.35% 0.095 92.98);
+  --color-cream-700: oklch(53.92% 0.077 92.98);
+  --color-cream-800: oklch(40.80% 0.056 92.98);
+  --color-cream-900: oklch(26.13% 0.032 92.98);
+  --color-cream-950: oklch(21.50% 0.025 92.98);
+
+  --color-porcelain-50: oklch(99.90% 0.000 0.00);
+  --color-porcelain-100: oklch(97.78% 0.000 0.00);
+  --color-porcelain-200: oklch(93.49% 0.000 0.00);
+  --color-porcelain-300: oklch(89.09% 0.000 0.00);
+  --color-porcelain-400: oklch(84.90% 0.000 0.00);
+  --color-porcelain-500: oklch(81.14% 0.000 0.00);
+  --color-porcelain-600: oklch(68.63% 0.000 0.00);
+  --color-porcelain-700: oklch(55.77% 0.000 0.00);
+  --color-porcelain-800: oklch(42.20% 0.000 0.00);
+  --color-porcelain-900: oklch(27.03% 0.000 0.00);
+  --color-porcelain-950: oklch(22.24% 0.000 0.00);
+
+  /* Nav bar – soft mauve (#d8d2d7) */
+  --color-nav: oklch(87.00% 0.009 330.97);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-luxury-gold: var(--color-gold-500);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --background: oklch(96.67% 0.014 92.98);
+  --foreground: oklch(19.02% 0.023 53.36);
+  --luxury-gold: var(--color-gold-500);
+  --e-global-color-primary: oklch(19.02% 0.023 53.36);
+  --e-global-color-secondary: oklch(23.12% 0.029 53.36);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-body), sans-serif;
+}
+
+/* Clickable elements show a pointer; :where keeps specificity low so utilities like cursor-none / cursor-zoom-in still win */
+@layer base {
+  :where(
+    a[href],
+    area[href],
+    button:not(:disabled),
+    summary,
+    [role="button"]:not([aria-disabled="true"]),
+    [role="link"],
+    [role="tab"]:not([aria-disabled="true"]),
+    [role="menuitem"],
+    [role="option"],
+    [role="switch"]:not([aria-disabled="true"]),
+    input[type="button"]:not(:disabled),
+    input[type="submit"]:not(:disabled),
+    input[type="reset"]:not(:disabled),
+    input[type="file"]:not(:disabled),
+    input[type="image"]:not(:disabled),
+    input[type="checkbox"]:not(:disabled),
+    input[type="radio"]:not(:disabled),
+    select:not(:disabled),
+    label[for]
+  ) {
+    cursor: pointer;
+  }
+
+  :where(
+    button:disabled,
+    input:disabled,
+    select:disabled,
+    [aria-disabled="true"],
+    a[aria-disabled="true"]
+  ) {
+    cursor: not-allowed;
+  }
+}
+
+/* Custom scrollbar for luxury feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--e-global-color-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold-500);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold-600);
+}

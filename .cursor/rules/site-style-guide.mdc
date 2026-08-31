@@ -1,0 +1,125 @@
+---
+alwaysApply: true
+---
+
+## Component Style Guide
+
+Use this reference when writing or updating **CURSOR INFO** blocks on section and block components (especially the **VISUAL STYLE** field). Values should match the the component itself and disregard the site-design.mdc
+
+### How to write VISUAL STYLE
+
+- Use **short, comma-separated adjectives** (2–5 terms).
+- **One line** in the CURSOR INFO block; no long paragraphs.
+- Pick terms that describe how the section *looks*, not what it contains (layout and content belong in other fields).
+- Put motion and behavior details (parallax, scroll animation) in **NOTES / MODIFIERS** unless they define the visual identity.
+
+**Example:**
+
+```ts
+* VISUAL STYLE: Modern, minimal, luxury, and clean
+```
+
+### Primary styles (default vocabulary)
+
+Best fit for this template. Prefer these unless a section intentionally breaks from the site aesthetic.
+
+| Style | Use when |
+|-------|----------|
+| **Modern** | Default for most sections |
+| **Minimal** | Generous whitespace, simple structure |
+| **Clean** | Uncluttered hierarchy, no visual noise |
+| **Professional** | Business- or trust-focused sections |
+| **Luxury** | Premium, high-end positioning |
+| **Sharp** | Crisp edges, defined structure |
+| **Sleek** | Polished, streamlined surfaces |
+| **Sophisticated** | Refined, upscale tone |
+| **Aspirational** | Elevated lifestyle or outcomes |
+| **Trustworthy** | Credibility, proof, reassurance |
+| **Editorial** | Magazine-like balance of text and imagery |
+
+### Layout and mood modifiers
+
+Combine with primary styles to narrow the description.
+
+| Style | Use when |
+|-------|----------|
+| **Bold** | Strong headlines, high visual weight |
+| **Text-focused** | Copy-heavy, limited imagery |
+| **Image-forward** | Photography or visuals dominate |
+| **High-contrast** | Strong light/dark, especially over imagery |
+| **Subtle** | Understated details, soft presence |
+| **Elegant** | Refined typography and spacing |
+| **Corporate** | Formal B2B tone |
+| **Warm** | Approachable, inviting feel |
+| **Dark** | Dark backgrounds or overlays |
+| **Light** | Bright, airy backgrounds |
+
+### Motion and interaction (optional in VISUAL STYLE)
+
+Prefer **NOTES / MODIFIERS** for implementation details. Include here only when motion defines the look.
+
+| Style | Use when |
+|-------|----------|
+| **Animated** | Entrance or scroll-driven motion |
+| **Parallax** | Depth and layered scroll effect |
+| **Interactive** | Hover states, filters, tabs, carousels |
+| **Static** | No motion; calm presentation |
+
+### Proven combinations (used in this codebase)
+
+| VISUAL STYLE |
+|--------------|
+| Modern, minimal, luxury, and clean |
+| Modern, minimal, and clean |
+| Modern, minimal, professional, and clean |
+| Modern, minimal, professional, and editorial |
+| Modern, minimal, luxury, clean, text-focused |
+| Minimal, sharp, professional, and modern |
+| Professional, modern, clean |
+| Modern, minimal, clean, text-centered |
+| Modern, minimal, and clean with strong contrast over imagery |
+
+**Default when unsure:** `Modern, minimal, luxury, and clean`
+
+### Quick picker by section type
+
+| Section type | Suggested VISUAL STYLE |
+|--------------|------------------------|
+| Hero | Modern, minimal, luxury, and clean |
+| Navigation / Footer | Modern, minimal, luxury, and clean |
+| Content / About | Modern, minimal, professional, and editorial |
+| Trust / Stats | Professional, modern, clean |
+| Testimonials | Modern, minimal, luxury, and clean |
+| Contact / CTA | Modern, minimal, luxury, and clean |
+| Gallery | Modern, minimal, professional, and clean |
+| 404 | Modern, minimal, luxury, and clean |
+| Text-only block | Modern, minimal, clean, text-focused |
+| Hero over image | Modern, minimal, and clean with strong contrast over imagery |
+
+### Styles to avoid (off-brand for this template)
+
+Use only when deliberately diverging from the site system:
+
+- Colorful, playful, funky, retro, grungy, maximalist, cartoonish, busy, cluttered
+
+### CURSOR INFO field reference
+
+When documenting a section component, use all fields consistently:
+
+| Field | Purpose |
+|-------|---------|
+| **SECTION TYPE** | Short phrase: what the section is |
+| **BEST FOR** | Page or use case fit |
+| **VISUAL STYLE** | Design adjectives from this guide |
+| **LAYOUT** | Structure: split, centered, grid, full-width, etc. |
+| **CONTENT ELEMENTS** | Concrete items inside the section |
+| **CONVERSION ROLE** | Goal: leads, trust, navigation, sign-up, etc. |
+| **IDEAL POSITION** | Placement on the page |
+| **NOTES / MODIFIERS** | Responsive behavior, parallax, animations, optional props |
+
+### Rules
+
+1. **Match the real component** — do not label a section "luxury" if the markup and styles are utilitarian.
+2. **Stay consistent** — similar sections should share similar VISUAL STYLE values so page-building can match them reliably.
+3. **Keep it scannable** — phrases and comma-separated lists only; no sentences in VISUAL STYLE.
+4. **Styling must represent the component, not site-contetn.md** 

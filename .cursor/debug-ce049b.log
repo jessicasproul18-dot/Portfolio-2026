@@ -1,0 +1,8 @@
+{"sessionId":"ce049b","runId":"pre-fix","hypothesisId":"H1","location":"next.config.ts:23","message":"Resolved Next.js output mode for build","data":{"nodeEnv":"production","output":"export","hasPwaConfig":true},"timestamp":1774546626865}
+{"sessionId":"ce049b","runId":"pre-fix","hypothesisId":"H2","location":"app/api/google-reviews.php/route.ts:10","message":"google-reviews route module evaluated","data":{},"timestamp":1774546631357}
+{"sessionId":"ce049b","runId":"pre-fix","hypothesisId":"H2","location":"app/api/google-reviews.php/route.ts:10","message":"google-reviews route module evaluated","data":{},"timestamp":1774546631843}
+{"sessionId":"ce049b","runId":"pre-fix","hypothesisId":"H3","location":"app/api/google-reviews.php/route.ts:45","message":"google-reviews GET entered","data":{},"timestamp":1774546631847}
+{"sessionId":"ce049b","runId":"pre-fix","hypothesisId":"H4","location":"app/api/google-reviews.php/route.ts:87","message":"google-reviews preparing upstream fetch","data":{"hasApiEndpoint":true},"timestamp":1774546631847}
+{"sessionId":"ce049b","runId":"pre-fix","hypothesisId":"H2","location":"app/api/google-reviews.php/route.ts:10","message":"google-reviews route module evaluated","data":{},"timestamp":1774546648637}
+{"sessionId":"ce049b","runId":"pre-fix","hypothesisId":"H3","location":"app/api/google-reviews.php/route.ts:45","message":"google-reviews GET entered","data":{},"timestamp":1774546648643}
+{"sessionId":"ce049b","runId":"pre-fix","hypothesisId":"H4","location":"app/api/google-reviews.php/route.ts:87","message":"google-reviews preparing upstream fetch","data":{"hasApiEndpoint":true},"timestamp":1774546648643}

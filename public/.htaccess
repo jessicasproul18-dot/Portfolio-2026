@@ -1,0 +1,26 @@
+# Match nginx 404 behavior for unknown paths.
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+
+# Allow AutoSSL validation.
+RewriteCond %{REQUEST_URI} ^/\.well-known/acme-challenge/
+RewriteRule ^ - [L]
+
+# Deny hidden files (.htaccess, .env, etc.) except .well-known.
+RewriteCond %{REQUEST_URI} !^/\.well-known/ [NC]
+RewriteRule "(^|/)\." - [F,L]
+
+# Block config.php in any casing/path variant, return 404 to hide existence.
+RewriteRule "(^|/)config\.php(/|$)" - [R=404,L,NC]
+
+# Block .env in any casing/path variant.
+RewriteRule "(^|/)\.env(/|$)" - [F,L,NC]
+
+# Serve only existing files or directories.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Static export behavior: unknown paths return 404 (no index.php fallback).
+RewriteRule ^ - [R=404,L]

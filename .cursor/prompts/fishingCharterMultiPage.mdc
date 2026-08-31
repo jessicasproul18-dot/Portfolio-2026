@@ -1,0 +1,105 @@
+---
+alwaysApply: false
+---
+
+# Multipage Layout (Fishing Charter)
+
+Rebuild `app/page.tsx` and add additional routes so the site presents **the business** using **content from `content.md`** as the single source of truth for narrative and detailed facts. Replace any placeholder or off-brand copy with content that matches the business and industry described in `content.md`. Keep the site sharp, minimalist, and professional per project rules, and ensure supporting email/API touchpoints and **`public/config.json`** are also on-brand and in sync.
+
+## 1. Content source and voice
+
+- **Source of truth (copy and long-form facts)**: Use `content.md` for all business facts: business name, owner/contact name, phone, email, address, hours, services, credentials, differentiators, experience, and any offers (e.g. free estimates).
+- **Structured config**: Update `public/config.json` whenever changes short site title (`site`), tagline-style `description`, `email`, `email_from`, `phone`, `address`, or review/API integration (`api_endpoint`). Match those fields to the same facts in `content.md` so they stay consistent.
+- **Voice**: Professional, positive, insightful, approachable. No em dashes, no “well-seasoned,” no “at its core.” Avoid repetitive phrasing.
+
+## 2. Section library and page structure
+
+### Use the page-build-with-sections workflow
+
+Follow the **page-build-with-sections** skill, but scan and compose from **`src/componentsAMP/Sections/`** (not `components/Sections/`). For each section, read its **CURSOR INFO** JSDoc block and choose components whose SECTION TYPE, BEST FOR, IDEAL POSITION, and CONVERSION ROLE match the page goal.
+
+Prefer passing props or small copy/class tweaks. Avoid major refactors of existing section internals unless required to wire `content.md` facts.
+
+### Core design sections (use these first)
+
+Build every page from this anchor set. Wire copy, images, and trip/service data from `content.md`:
+
+| Component | Path | Typical use |
+|-----------|------|-------------|
+| `HeroSlideshowSection` | `src/componentsAMP/Sections/Hero/HeroSlideshowSection.tsx` | Home hero: rotating charter imagery, dual CTAs, scroll cue |
+| `OverlappingPhotoIntroSection` | `src/componentsAMP/Sections/Content/OverlappingPhotoIntroSection.tsx` | Story beat immediately below hero |
+| `FullBleedParallaxThreeColumnCards` | `src/componentsAMP/Sections/Content/FullBleedParallaxThreeColumnCards.tsx` | Services, differentiators, or “why us” value props |
+| `RatesSection` | `src/componentsAMP/Sections/Content/RatesSection.tsx` | Bookable trips/packages with starting rates |
+| `OverlappingPhotoAboutSection` | `src/componentsAMP/Sections/Content/OverlappingPhotoAboutSection.tsx` | Captain/company story (mirrored editorial layout) |
+| `TwoColumnImageRightSection` | `src/componentsAMP/Sections/Content/TwoColumnImageRightSection.tsx` | About page blocks, owner bio, process details |
+| `GallerySection` | `src/componentsAMP/Sections/Gallery/GallerySection.tsx` | Catch photos, boat, and on-water proof |
+| `FullBleedParallaxTwoColumnContactForm` | `src/componentsAMP/Sections/Contact/FullBleedParallaxTwoColumnContactForm.tsx` | Lead capture before footer |
+
+Also use shared chrome from the same library when needed: `Navigation`, `Footer`, `ClientTestimonials`, `PageHeader`, and other sections in `src/componentsAMP/Sections/` whose CURSOR INFO fits the page.
+
+### Shared visual language (match when creating new sections)
+
+New sections must feel like they belong with the core set above. Reuse these patterns instead of inventing new layouts:
+
+- **Full-bleed parallax**: Background photography with gradient overlay, `@/components/UI/Parallax`, scroll-driven blur/zoom (see hero and full-bleed card/contact sections).
+- **Editorial overlapping photo**: Deep cool background (`secondary-950`), white card overlapping full-height side photography, accent rule under headings (see intro and about overlapping sections).
+- **Glass icon cards**: Three-column glass cards on parallax backgrounds for scannable value props.
+- **Marina rate cards**: Image, price badge, spec line, footer columns, CTA to `#contact`.
+- **Two-column story blocks**: Copy left, image right, subtle scroll-in zoom and responsive gradient backgrounds.
+- **Motion**: `framer-motion` entrance and scroll animations consistent with existing sections; respect reduced-motion where applicable.
+- **Stack**: `'use client'` only when needed, `@/components/UI/Button`, Next.js `Image`/`Link`, semantic `<section>`, standard spacing (`py-8 px-4 md:py-16 md:px-8 lg:py-24 lg:px-12`), column gaps `gap-4 md:gap-8 lg:gap-12`.
+
+### Suggested multipage composition
+
+Map `content.md` into routes under `src/app/`. Adjust section order using each component’s IDEAL POSITION:
+
+- **Home** (`page.tsx`): HeroSlideshow → OverlappingPhotoIntro → FullBleedParallaxThreeColumnCards → RatesSection → GallerySection (optional) → ClientTestimonials (optional) → FullBleedParallaxTwoColumnContactForm
+- **About**: PageHeader or compact hero → OverlappingPhotoAboutSection → TwoColumnImageRightSection (owner/process) → trust or credentials block (existing or new section)
+- **Trips / Services**: PageHeader → RatesSection → FullBleedParallaxThreeColumnCards (trip highlights) → CTA toward contact
+- **Gallery**: PageHeader → GallerySection
+- **Contact** (if standalone): PageHeader → FullBleedParallaxTwoColumnContactForm
+
+Create additional routes only when `content.md` supports distinct narratives; otherwise keep a strong home page and link to in-page anchors (`#rates`, `#gallery`, `#contact`).
+
+### When no existing section fits
+
+If CURSOR INFO across `src/componentsAMP/Sections/` does not cover a needed block (e.g. FAQ accordion, seasonal availability, gear checklist, policies):
+
+1. **Create a new section** in the appropriate subfolder under `src/componentsAMP/Sections/` (e.g. `Content/`, `Contact/`, `CTA/`).
+2. **Match the shared visual language** above: same typography hierarchy, theme colors, spacing, parallax/motion patterns, and component primitives as the core eight sections.
+3. **Add a full CURSOR INFO block** using the **section-component-cursor-info** skill (`.cursor/skills/section-component-cursor-info/SKILL.md`): place it after `'use client';` and before imports; one line per field; values that describe the real component.
+4. Export a named function component (e.g. `export function SeasonalAvailabilitySection()`).
+
+Do not build one-off markup inline in `page.tsx` when a reusable section is appropriate.
+
+### Content mapping
+
+- **Map content** from `content.md` into section props and copy: services list, trip types, credentials, differentiators, contact details, and calls to action. Use the structure and wording implied by `content.md`; do not invent facts.
+- Source **site label, email, phone, and address** from `public/config.json` (loaded on the server and passed as props where sections need structured contact data).
+
+## 3. Color palette and `globals.css`
+
+- **If a color palette is provided** (e.g. brand hex codes or a defined palette in `content.md`):
+  - Add each color to `app/globals.css` in the `@theme` block.
+  - For each color, define **all shades**: `50`, `100`, `200`, `300`, `400`, `500`, `600`, `700`, `800`, `900`, `950` (50/100 = lightest, 900/950 = darkest).
+  - **Convert any hex values to `oklch()`** and use the same naming as existing theme colors (e.g. `--color-primary-500`, `--color-secondary-600`). Follow the same L/chroma/hue pattern as the existing primary/secondary scales so shades feel consistent.
+- **If no palette is given** but the design uses existing brand colors, ensure those colors are defined in `globals.css` with full shade scales in `oklch()` so pages can use them.
+
+## 4. Technical and design rules
+
+- Follow **site-design** spacing: standard section padding, adjacent same-background rules, column gaps `gap-4 md:gap-8 lg:gap-12`.
+- Use **Tailwind only**; use theme colors (e.g. `primary-*`, `secondary-*`, and any accent scales) for backgrounds, text, and accents. No arbitrary hex classes in markup.
+- Keep **accessibility and responsiveness**: semantic HTML, ARIA where needed, mobile-first breakpoints.
+- After changing copy or facts, **update `content.md`** if any new or refined facts are introduced, and **update `public/config.json`** for corresponding structured fields.
+
+## 5. Checklist before finishing
+
+- [ ] All page copy and facts come from or align with `content.md`.
+- [ ] `public/config.json` fields match the same business facts as `content.md` (site label, description, email, phone, address, `api_endpoint` as applicable).
+- [ ] No placeholder or off-brand sections or copy remain; everything matches the business and industry in `content.md`.
+- [ ] Home and additional routes compose sections from `src/componentsAMP/Sections/`, prioritizing the eight core design sections listed in §2.
+- [ ] Any new sections live under `src/componentsAMP/Sections/`, match the shared visual language, and include a complete **CURSOR INFO** block per the **section-component-cursor-info** skill.
+- [ ] Any new or specified palette colors are in `globals.css` with 50–950 shades in `oklch()`.
+- [ ] Spacing and styling follow site-design and site-content rules.
+- [ ] PWA metadata is rebranded: update `public/manifest.json` (`name`, `short_name`, icons/paths if needed).
+- [ ] Email/API touchpoints are reviewed and rebranded where needed: `public/config.json`, `public_html/api/email.php`, `public_html/email/contact-template.php`, and related email handling such as `public_html/config.php`.

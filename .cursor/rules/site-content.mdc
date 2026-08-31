@@ -1,0 +1,35 @@
+---
+alwaysApply: true
+---
+
+## Content Requirements
+
+
+### Brand Personality
+- **Professional** – We speak with clarity and expertise.
+- **Positive** – We frame challenges as opportunities.
+- **Insightful** – We provide value through thoughtful, forward-thinking content.
+- **Approachable** – We communicate complex ideas in a human and clear way.
+
+### Content 
+Avoid repetitive phrasing
+
+### Source of Truth for Business Content
+- When writing or updating copy, first review the `content.md` file in the project root.
+- Use `content.md` as the primary reference for:
+  - Business description and positioning
+  - Services and value propositions
+  - Contact details and office/location information (for narrative, hours, and prose you cannot represent cleanly as a single config field)
+- Keep content consistent with `content.md`; if new facts are introduced (e.g., updated hours, addresses, or services), also update `content.md` so it remains the canonical source for narrative and long-form facts.
+
+### `public/config.json` (structured site config)
+- **`public/config.json` is the single update point** for structured **site identity and contact** data used by the app and exports: short site label (`site`), one-line description (`description`), `email`, `email_from`, `phone`, `address`, and integrations such as `api_endpoint` (for example Google reviews proxy configuration).
+- **When creating or editing sections, page copy wiring, or global UI** (footer, contact blocks, navigation labels tied to the business name, mobile tab bar `mailto`/`tel`, meta or layout helpers, etc.) that needs those fields, **read them from `public/config.json`** (via a server component loader, shared helper, or props passed from the layout) instead of hardcoding duplicate strings. Add a key to `config.json` when a new structured field is needed, then align `content.md` for any matching narrative.
+- Treat `public/config.json` as a required touchpoint whenever you change **machine-consumed** site data (same fields as above).
+- PHP and API routes read this file (alongside fallbacks under `public_html/` after export); keep values **aligned with `content.md`** for shared facts (business name, contact email/phone, address). If you update those facts in one place, update both so they do not drift.
+- Do not use `config.json` to replace `content.md` for services lists, positioning paragraphs, or detailed copy; use it for the structured fields the app and server expect.
+
+### Words, phrases, and characters to avoid
+- **em dash**
+- **"well-seasoned"** or **well seasoned** 
+- **"at its core"**

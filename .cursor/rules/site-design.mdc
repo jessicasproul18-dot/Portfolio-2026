@@ -1,0 +1,459 @@
+---
+alwaysApply: true
+---
+
+=== page design rules ===
+
+**Objective**: Maintain a **Next.js website** with a **sharp, sleek, minimalist, and professional aesthetic**.  
+The site should target high-end clients and present the businesses services effectively.  
+
+### Overall Style
+- **Aesthetic**: Sharp, minimalist, and professional.  
+- **Tone**: Sophisticated, aspirational, and trustworthy.  
+- **User Experience**: Prioritize intuitive navigation, high-quality visuals, fast loading, and seamless responsiveness.  
+
+### Typography
+- **Font**: Use modern sans-serif (Montserrat, Poppins, or Inter) via Next.js font optimization or Tailwind’s `font-sans`.  
+- **Hierarchy**:  
+  - **Headings**: Bold, large (`font-bold`, `text-4xl` or `text-5xl`) for titles like “Services” or “About”.  
+  - **Body Text**: Regular or light (`font-normal` or `font-light`, `text-base` or `text-lg`) for readability.  
+  - **Spacing**: Apply `leading-relaxed` or `leading-loose` for line height, and `tracking-tight` for elegance.  
+- **Implementation**: Use Tailwind typography utilities (e.g., `font-montserrat`, `text-2xl`, `leading-7`).  
+
+### Color Usage
+- **Avoid hex classes**: Do not use arbitrary hex values in class names (e.g. avoid `bg-[#C7AE7F]`, `text-[#171717]`, or `border-[#27272a]`).
+- **Use theme or Tailwind colors**: Prefer colors defined in `app/globals.css` (e.g. `primary`, `secondary`, `gold`, `background`, `foreground`) or Tailwind’s built-in palette (e.g. `zinc`, `white`, `black`, `slate`).
+- **Reference**: Check `globals.css` for `@theme` and `:root` variables; use the corresponding Tailwind utilities (e.g. `bg-primary-500`, `text-gold-600`, `bg-background`, `text-foreground`).
+
+# Page Design Spacing Guidelines
+
+These guidelines ensure consistent, maintainable spacing for page sections and column layouts across the application.
+
+## Section Spacing Standards
+
+### Standard Section Padding
+
+All page sections should use responsive padding that scales appropriately across device sizes.
+
+**Standard Section Spacing:**
+- **Desktop** (`lg:` ≥1024px): `py-24 px-12`
+- **Tablet** (`md:` ≥768px): `py-16 px-8`
+- **Mobile** (base <768px): `py-8 px-4`
+
+```typescript
+// Standard section example
+<section className="py-8 px-4 md:py-16 md:px-8 lg:py-24 lg:px-12">
+  {/* Section content */}
+</section>
+```
+
+### When to Use Standard Spacing
+
+- Use standard spacing for standalone sections
+- Use when sections have different background colors
+- Use for the first or last section on a page
+- Use when a section is separated by visual elements (borders, dividers, etc.)
+
+## Adjacent Section Handling
+
+### Same Background Color Rule
+
+When two sibling sections share the same background color, reduce the spacing between them by using half-padding on the touching sides.
+
+**Adjacent Sections with Same Background:**
+
+**First Section:**
+- **Desktop**: `pt-24 pb-16 px-12`
+- **Tablet**: `pt-16 pb-8 px-8`
+- **Mobile**: `pt-8 pb-4 px-4`
+
+**Second Section:**
+- **Desktop**: `pb-24 pt-16 px-12`
+- **Tablet**: `pb-16 pt-8 px-8`
+- **Mobile**: `pb-8 pt-4 px-4`
+
+```typescript
+// Adjacent sections with same background
+<section className="bg-white pt-8 pb-4 px-4 md:pt-16 md:pb-8 md:px-8 lg:pt-24 lg:pb-16 lg:px-12">
+  {/* First section content */}
+</section>
+
+<section className="bg-white pb-8 pt-4 px-4 md:pb-16 md:pt-8 md:px-8 lg:pb-24 lg:pt-16 lg:px-12">
+  {/* Second section content */}
+</section>
+```
+
+### Detecting Same Background Colors
+
+To determine if sections share the same background:
+
+1. **Check background color classes**: Compare `bg-*` classes (e.g., `bg-white`, `bg-zinc-900`)
+2. **Check computed styles**: If using custom colors or CSS variables, verify they render the same
+3. **Consider opacity variations**: `bg-white/90` and `bg-white` are different backgrounds
+4. **Check gradient backgrounds**: Gradients are considered different backgrounds even if colors are similar
+
+```typescript
+// Same background - use adjacent spacing
+<section className="bg-white pt-8 pb-4 ...">
+<section className="bg-white pb-8 pt-4 ...">
+
+// Different backgrounds - use standard spacing
+<section className="bg-white py-8 ...">
+<section className="bg-zinc-900 py-8 ...">
+```
+
+### Multiple Adjacent Sections
+
+When three or more sections share the same background:
+
+- **First section**: `pt-{full} pb-{half} px-{standard}`
+- **Middle sections**: `py-{half} px-{standard}`
+- **Last section**: `pb-{full} pt-{half} px-{standard}`
+
+```typescript
+// Three adjacent sections with same background
+<section className="bg-white pt-8 pb-4 px-4 md:pt-16 md:pb-8 md:px-8 lg:pt-24 lg:pb-16 lg:px-12">
+  {/* First section */}
+</section>
+
+<section className="bg-white py-4 px-4 md:py-8 md:px-8 lg:py-16 lg:px-12">
+  {/* Middle section */}
+</section>
+
+<section className="bg-white pb-8 pt-4 px-4 md:pb-16 md:pt-8 md:px-8 lg:pb-24 lg:pt-16 lg:px-12">
+  {/* Last section */}
+</section>
+```
+
+## Column Spacing
+
+### Column Gap Standards
+
+Column spacing should complement section horizontal padding for visual consistency.
+
+**Column Gap Spacing:**
+- **Desktop** (`lg:` ≥1024px): `gap-12` (matches `px-12`)
+- **Tablet** (`md:` ≥768px): `gap-8` (matches `px-8`)
+- **Mobile** (base <768px): `gap-4` (matches `px-4`)
+
+```typescript
+// Grid layout with column spacing
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 lg:gap-12">
+  {/* Grid items */}
+</div>
+
+// Flex layout with column spacing
+<div className="flex flex-col md:flex-row gap-4 md:gap-8 lg:gap-12">
+  {/* Flex items */}
+</div>
+```
+
+### Column Spacing Usage
+
+**Use column gaps for:**
+- Grid layouts (`grid`, `grid-cols-*`)
+- Flex layouts (`flex`, `flex-row`, `flex-col`)
+- Space between columns in multi-column layouts
+- Spacing between related content blocks within a section
+
+**Do not use column gaps for:**
+- Spacing between unrelated sections (use section padding instead)
+- Spacing between rows in grid layouts (use `gap-y-*` if different from `gap-x-*`)
+- Spacing that should collapse on mobile (use margins with responsive utilities)
+
+### Grid vs Flex Gap Behavior
+
+**Grid Layouts:**
+- `gap-*` applies to both row and column gaps
+- Use `gap-x-*` and `gap-y-*` for different horizontal/vertical spacing if needed
+
+```typescript
+// Grid with uniform gap
+<div className="grid grid-cols-2 gap-4 md:gap-8 lg:gap-12">
+  {/* Items */}
+</div>
+
+// Grid with different row/column gaps
+<div className="grid grid-cols-2 gap-x-4 md:gap-x-8 lg:gap-x-12 gap-y-8 md:gap-y-16 lg:gap-y-24">
+  {/* Items */}
+</div>
+```
+
+**Flex Layouts:**
+- `gap-*` applies spacing in the flex direction
+- Use `gap-x-*` and `gap-y-*` for flex-wrap layouts
+
+```typescript
+// Flex row with gap
+<div className="flex flex-row flex-wrap gap-4 md:gap-8 lg:gap-12">
+  {/* Items */}
+</div>
+
+// Flex column with gap
+<div className="flex flex-col gap-4 md:gap-8 lg:gap-12">
+  {/* Items */}
+</div>
+```
+
+## Implementation Examples
+
+### Example 1: Standard Page with Multiple Sections
+
+```typescript
+export default function Page() {
+  return (
+    <>
+      {/* Hero section - may use different spacing */}
+      <section className="py-8 px-4 md:py-16 md:px-8 lg:py-24 lg:px-12">
+        <h1>Hero Content</h1>
+      </section>
+
+      {/* Standard section with different background */}
+      <section className="bg-zinc-900 py-8 px-4 md:py-16 md:px-8 lg:py-24 lg:px-12">
+        <h2>Dark Section</h2>
+      </section>
+
+      {/* Standard section with white background */}
+      <section className="bg-white py-8 px-4 md:py-16 md:px-8 lg:py-24 lg:px-12">
+        <h2>White Section</h2>
+      </section>
+    </>
+  );
+}
+```
+
+### Example 2: Adjacent Sections with Same Background
+
+```typescript
+export default function Page() {
+  return (
+    <>
+      {/* First white section */}
+      <section className="bg-white pt-8 pb-4 px-4 md:pt-16 md:pb-8 md:px-8 lg:pt-24 lg:pb-16 lg:px-12">
+        <h2>First Section</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 lg:gap-12">
+          <div>Column 1</div>
+          <div>Column 2</div>
+        </div>
+      </section>
+
+      {/* Second white section - same background */}
+      <section className="bg-white pb-8 pt-4 px-4 md:pb-16 md:pt-8 md:px-8 lg:pb-24 lg:pt-16 lg:px-12">
+        <h2>Second Section</h2>
+        <div className="flex flex-col md:flex-row gap-4 md:gap-8 lg:gap-12">
+          <div>Item 1</div>
+          <div>Item 2</div>
+        </div>
+      </section>
+    </>
+  );
+}
+```
+
+### Example 3: Section with Column Layout
+
+```typescript
+export default function FeatureSection() {
+  return (
+    <section className="py-8 px-4 md:py-16 md:px-8 lg:py-24 lg:px-12">
+      <h2 className="mb-8 md:mb-12 lg:mb-16">Features</h2>
+      
+      {/* Grid with proper column spacing */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 lg:gap-12">
+        <div className="feature-card">
+          <h3>Feature 1</h3>
+          <p>Description</p>
+        </div>
+        <div className="feature-card">
+          <h3>Feature 2</h3>
+          <p>Description</p>
+        </div>
+        <div className="feature-card">
+          <h3>Feature 3</h3>
+          <p>Description</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+```
+
+### Example 4: Complex Layout with Mixed Backgrounds
+
+```typescript
+export default function ComplexPage() {
+  return (
+    <>
+      {/* Hero - full spacing */}
+      <section className="bg-gradient-to-b from-blue-500 to-blue-700 py-8 px-4 md:py-16 md:px-8 lg:py-24 lg:px-12">
+        <h1>Hero</h1>
+      </section>
+
+      {/* White section 1 - top spacing only (first) */}
+      <section className="bg-white pt-8 pb-4 px-4 md:pt-16 md:pb-8 md:px-8 lg:pt-24 lg:pb-16 lg:px-12">
+        <h2>Section 1</h2>
+      </section>
+
+      {/* White section 2 - half spacing (middle) */}
+      <section className="bg-white py-4 px-4 md:py-8 md:px-8 lg:py-16 lg:px-12">
+        <h2>Section 2</h2>
+      </section>
+
+      {/* White section 3 - bottom spacing only (last) */}
+      <section className="bg-white pb-8 pt-4 px-4 md:pb-16 md:pt-8 md:px-8 lg:pb-24 lg:pt-16 lg:px-12">
+        <h2>Section 3</h2>
+      </section>
+
+      {/* Different background - full spacing */}
+      <section className="bg-zinc-900 py-8 px-4 md:py-16 md:px-8 lg:py-24 lg:px-12">
+        <h2>Dark Section</h2>
+      </section>
+    </>
+  );
+}
+```
+
+## Responsive Breakpoints
+
+### Tailwind Breakpoint Reference
+
+- **Mobile (base)**: `< 768px` - Default styles, no prefix
+- **Tablet (`md:`)**: `≥ 768px` - Medium screens and up
+- **Desktop (`lg:`)**: `≥ 1024px` - Large screens and up
+
+### Breakpoint Usage Pattern
+
+Always use mobile-first approach with responsive prefixes:
+
+```typescript
+// Mobile-first: base styles for mobile, then override for larger screens
+className="py-8 px-4 md:py-16 md:px-8 lg:py-24 lg:px-12"
+
+// NOT desktop-first
+// className="lg:py-24 md:py-16 py-8" // Avoid this pattern
+```
+
+## Best Practices
+
+### Do's
+
+- ✅ Always use responsive spacing utilities (`py-8 md:py-16 lg:py-24`)
+- ✅ Check background colors before applying adjacent section spacing
+- ✅ Use column gaps that match section horizontal padding
+- ✅ Apply mobile-first responsive design
+- ✅ Use semantic HTML (`<section>` elements)
+- ✅ Maintain consistent spacing ratios (2:1 for full:half)
+- ✅ Test spacing on all breakpoints
+- ✅ Use Tailwind's gap utilities for column spacing
+- ✅ Document exceptions when deviating from standards
+
+### Don'ts
+
+- ❌ Don't mix different spacing systems (stick to Tailwind utilities)
+- ❌ Don't use adjacent spacing for sections with different backgrounds
+- ❌ Don't forget to check background colors before reducing spacing
+- ❌ Don't use fixed pixel values - use Tailwind spacing scale
+- ❌ Don't skip responsive breakpoints
+- ❌ Don't use margins for column spacing (use `gap-*` utilities)
+- ❌ Don't apply adjacent spacing to first/last sections unnecessarily
+- ❌ Don't mix `gap-*` with manual margins in the same container
+
+## Exceptions and Special Cases
+
+### Hero Sections
+
+Hero sections may use different spacing patterns:
+- Full viewport height sections may use `min-h-screen` with centered content
+- Hero sections can deviate from standard spacing if design requires it
+- Document any hero-specific spacing in component comments
+
+```typescript
+// Hero section exception
+<section className="min-h-screen flex items-center justify-center py-8 px-4 md:py-16 md:px-8">
+  {/* Hero content - may use different spacing */}
+</section>
+```
+
+### Full-Width Sections
+
+Sections that span full width (no horizontal padding):
+- Use `w-full` or container classes
+- Still apply vertical padding: `py-8 md:py-16 lg:py-24`
+- Remove horizontal padding: `px-0` or omit `px-*` classes
+
+```typescript
+// Full-width section
+<section className="w-full py-8 md:py-16 lg:py-24">
+  {/* Full-width content */}
+</section>
+```
+
+### Container Sections
+
+Sections with max-width containers:
+- Apply section padding to the outer `<section>` element
+- Use container classes (`container`, `container mx-auto`) for content width
+- Maintain column spacing within containers
+
+```typescript
+// Container section
+<section className="py-8 px-4 md:py-16 md:px-8 lg:py-24 lg:px-12">
+  <div className="container mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 lg:gap-12">
+      {/* Content */}
+    </div>
+  </div>
+</section>
+```
+
+## Spacing Reference Table
+
+### Section Padding
+
+| Breakpoint | Vertical (py) | Horizontal (px) | Half Vertical |
+|------------|----------------|-----------------|---------------|
+| Mobile (base) | `py-8` | `px-4` | `py-4` |
+| Tablet (md:) | `md:py-16` | `md:px-8` | `md:py-8` |
+| Desktop (lg:) | `lg:py-24` | `lg:px-12` | `lg:py-16` |
+
+### Column Gaps
+
+| Breakpoint | Gap Utility |
+|------------|-------------|
+| Mobile (base) | `gap-4` |
+| Tablet (md:) | `md:gap-8` |
+| Desktop (lg:) | `lg:gap-12` |
+
+### Adjacent Section Spacing
+
+| Breakpoint | First Section | Second Section |
+|------------|---------------|----------------|
+| Mobile | `pt-8 pb-4` | `pb-8 pt-4` |
+| Tablet | `md:pt-16 md:pb-8` | `md:pb-16 md:pt-8` |
+| Desktop | `lg:pt-24 lg:pb-16` | `lg:pb-24 lg:pt-16` |
+
+## Integration with Existing Patterns
+
+### Component Development
+
+When creating new page components:
+1. Wrap content in `<section>` elements
+2. Apply appropriate spacing classes based on background color context
+3. Use column gaps for internal layouts
+4. Follow responsive breakpoint patterns
+
+### Layout Integration
+
+Page layouts should:
+- Allow sections to control their own spacing
+- Not override section spacing at the layout level
+- Provide consistent container structure when needed
+
+### Migration Notes
+
+When updating existing pages:
+1. Identify sections with same background colors
+2. Apply adjacent spacing rules where appropriate
+3. Update column layouts to use standard gap utilities
+4. Ensure all spacing is responsive
+5. Test on all breakpoints

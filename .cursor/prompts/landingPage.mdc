@@ -1,0 +1,46 @@
+---
+alwaysApply: false
+---
+
+# Landing Page Rebrand Prompt
+
+Rebrand the main landing page (`app/page.tsx`) so it presents **the business** using **content from `content.md`** as the single source of truth for narrative and detailed facts. Replace any placeholder or off-brand copy with content that matches the business and industry described in `content.md`. Keep the site sharp, minimalist, and professional per project rules, and ensure supporting email/API touchpoints and **`public/config.json`** are also on-brand and in sync.
+
+## 1. Content source and voice
+
+- **Source of truth (copy and long-form facts)**: Use `content.md` for all business facts: business name, owner/contact name, phone, email, address, hours, services, credentials, differentiators, experience, and any offers (e.g. free estimates).
+- **Structured config**: Update `public/config.json` whenever the rebrand changes short site title (`site`), tagline-style `description`, `email`, `email_from`, `phone`, `address`, or review/API integration (`api_endpoint`). Match those fields to the same facts in `content.md` so they stay consistent.
+- **Voice**: Professional, positive, insightful, approachable. No em dashes, no “well-seasoned,” no “at its core.” Avoid repetitive phrasing.
+
+## 2. Page structure and sections
+
+- **Use the page-build-with-sections skill**: Prefer existing section components in `components/Sections/`. Read each section’s **CURSOR INFO** block to choose sections that fit the business and landing goals (e.g. hero, services, about, testimonials, CTA, contact).
+- **Compose** `app/page.tsx` by importing and ordering section components to match narrative flow (e.g. Hero → About/Services → Social proof → CTA → Contact). Remove, or replace sections that don’t fit the business; create, repurpose or swap in sections that do.
+- **Map content** from `content.md` into section props and copy: services list, credentials, differentiators, contact details, and any calls to action. Use the exact structure and wording implied by `content.md`; don’t invent facts.
+- Prefer passing props or small copy/class tweaks; avoid major refactors of section internals. If an existing section cannot fit the new purpose, create a new section component that follows the same design language, spacing, and styling conventions as the other sections on the site.
+
+## 3. Color palette and `globals.css`
+
+- **If a color palette is provided** (e.g. brand hex codes or a defined palette):
+  - Add each color to `app/globals.css` in the `@theme` block.
+  - For each color, define **all shades**: `50`, `100`, `200`, `300`, `400`, `500`, `600`, `700`, `800`, `900`, `950` (50/100 = lightest, 900/950 = darkest).
+  - **Convert any hex values to `oklch()`** and use the same naming as existing theme colors (e.g. `--color-primary-500`, `--color-secondary-600`). Follow the same L/chroma/hue pattern as the existing primary/secondary scales so shades feel consistent.
+- **If no palette is given** but the design uses existing brand colors, ensure those colors are defined in `globals.css` with full shade scales in `oklch()` so the landing page can use them.
+
+## 4. Technical and design rules
+
+- Follow **site-design** spacing: standard section padding (`py-8 px-4 md:py-16 md:px-8 lg:py-24 lg:px-12`), adjacent same-background rules, column gaps `gap-4 md:gap-8 lg:gap-12`.
+- Use **Tailwind only**; use theme colors (e.g. `primary-*`, `secondary-*`, and any accent scales) for backgrounds, text, and accents.
+- Keep **accessibility and responsiveness**: semantic HTML, ARIA where needed, mobile-first breakpoints.
+- After changing copy or facts, **update `content.md`** if any new or refined facts are introduced so it stays the single source of truth for narrative content, and **update `public/config.json`** for any corresponding structured fields (contact, site label, `api_endpoint`, etc.).
+
+## 5. Checklist before finishing
+
+- [ ] All landing copy and facts come from or align with `content.md`.
+- [ ] `public/config.json` fields match the same business facts as `content.md` (site label, description, email, phone, address, `api_endpoint` as applicable).
+- [ ] No placeholder or off-brand sections or copy remain; everything matches the business and industry in `content.md`.
+- [ ] Any new or specified palette colors are in `globals.css` with 50–950 shades in `oklch()`.
+- [ ] Page composes sections from `components/Sections/` using CURSOR INFO; new sections only when nothing fits.
+- [ ] Spacing and styling follow site-design and site-content rules.
+- [ ] PWA metadata is rebranded: update `public/manifest.json` (`name`, `short_name`, icons/paths if needed).
+- [ ] Email/API touchpoints are reviewed and rebranded where needed: `public/config.json`, `public_html/api/email.php`, `public_html/email/contact-template.php`, and related email handling such as `public_html/config.php`.

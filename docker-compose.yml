@@ -1,0 +1,15 @@
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./public_html:/usr/share/nginx/html:ro,cached
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+
+  php:
+    image: php:8.3-fpm
+    volumes:
+      - ./public_html:/usr/share/nginx/html:cached
