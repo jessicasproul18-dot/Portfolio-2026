@@ -77,6 +77,7 @@ export type TwoColumnImageRightSectionProps = {
   headingLine1?: string;
   headingLine2?: string;
   headingLine3?: string;
+  headingLine4?: string;
   body?: string;
   imageSrc?: string;
   imageAlt?: string;
@@ -473,6 +474,7 @@ export function TwoColumnImageRightSection({
   headingLine1,
   headingLine2,
   headingLine3,
+  headingLine4,
   body,
   imageSrc = '/images/headshot.png',
   imageAlt = 'Jessica Sproul headshot',
@@ -562,9 +564,15 @@ export function TwoColumnImageRightSection({
           className ?? 'py-24',
         ].join(' ')}
         aria-labelledby={
-          headingLine1 || headingLine2 || headingLine3 ? 'about-heading' : undefined
+          headingLine1 || headingLine2 || headingLine3 || headingLine4
+            ? 'about-heading'
+            : undefined
         }
-        aria-label={!headingLine1 && !headingLine2 && !headingLine3 ? 'About' : undefined}
+        aria-label={
+          !headingLine1 && !headingLine2 && !headingLine3 && !headingLine4
+            ? 'About'
+            : undefined
+        }
       >
         <div className="grid items-start gap-x-4 gap-y-8 md:grid-cols-2 md:items-center md:gap-x-16 lg:gap-x-16">
           {interactive ? (
@@ -583,7 +591,7 @@ export function TwoColumnImageRightSection({
             </div>
           )}
 
-          {eyebrow || headingLine1 || headingLine2 || headingLine3 || body ? (
+          {eyebrow || headingLine1 || headingLine2 || headingLine3 || headingLine4 || body ? (
             <div className="space-y-8 md:col-start-2 md:row-start-1 md:self-center">
               <header>
                 {eyebrow ? (
@@ -591,16 +599,15 @@ export function TwoColumnImageRightSection({
                     {eyebrow}
                   </p>
                 ) : null}
-                {headingLine1 || headingLine2 || headingLine3 ? (
+                {headingLine1 || headingLine2 || headingLine3 || headingLine4 ? (
                   <h2
                     id="about-heading"
-                    className="text-3xl font-normal tracking-tight text-zinc-900 sm:text-4xl md:text-5xl"
+                    className="max-w-xl text-pretty text-[1.75rem] font-normal leading-snug tracking-tight text-zinc-900 sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-tight"
                   >
-                    {headingLine1}
-                    {headingLine1 && (headingLine2 || headingLine3) ? <br /> : null}
-                    {headingLine2}
-                    {headingLine2 && headingLine3 ? <br /> : null}
-                    {headingLine3}
+                    {headingLine1 ? <span className="block">{headingLine1}</span> : null}
+                    {[headingLine2, headingLine3, headingLine4]
+                      .filter(Boolean)
+                      .join(' ') || null}
                   </h2>
                 ) : null}
               </header>
