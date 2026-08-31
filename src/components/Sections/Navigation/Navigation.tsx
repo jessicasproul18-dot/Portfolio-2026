@@ -15,6 +15,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Phone, Mail, ChevronDown } from 'lucide-react';
 import { Button } from '../../../components/UI/Button';
 import { HamburgerButton } from '../../../components/UI/HamburgerButton';
@@ -30,7 +31,7 @@ import {
   MobileMenuTrigger,
 } from '../../../components/UI/MobileMenu';
 import { ScrollArea } from '../../../components/UI/ScrollArea';
-import { navigationItems } from '@/lib/navigation';
+import { getContactHref, getNavigationItems } from '@/lib/navigation';
 import { AgentProfile } from '../../../components/UI/AgentProfile';
 
 const SCROLL_EPSILON = 2;
@@ -42,6 +43,9 @@ export type NavigationProps = {
 };
 
 export function Navigation({ siteLabel, phone, email }: NavigationProps) {
+  const pathname = usePathname();
+  const navItems = getNavigationItems(pathname);
+  const contactHref = getContactHref(pathname);
   const telHref = `tel:${phone}`;
   const mailHref = `mailto:${email}`;
   const [isScrolled, setIsScrolled] = useState(false);
@@ -116,9 +120,9 @@ export function Navigation({ siteLabel, phone, email }: NavigationProps) {
           </div>
 
           <nav aria-label="Primary" className="flex items-center gap-6">
-            {navigationItems.map((item) => (
+            {navItems.map((item) => (
               <Link
-                key={item.href}
+                key={item.label}
                 href={item.href}
                 className={`text-sm font-normal uppercase tracking-[1.5px] transition-opacity ${navMutedClass}`}
               >
@@ -153,11 +157,11 @@ export function Navigation({ siteLabel, phone, email }: NavigationProps) {
                   <MobileMenuBody>
                     <MobileMenuTitle>Menu</MobileMenuTitle>
                     <MobileMenuNav>
-                      {navigationItems.map((item, index) => {
+                      {navItems.map((item, index) => {
                         const Icon = item.icon;
                         return (
                           <MobileMenuLink
-                            key={index}
+                            key={item.label}
                             href={item.href}
                             className="flex items-center gap-3"
                           >
@@ -199,7 +203,7 @@ export function Navigation({ siteLabel, phone, email }: NavigationProps) {
                     <span>{email}</span>
                   </MobileMenuLink>
                   <MobileMenuLink
-                    href="/#contact"
+                    href={contactHref}
                     className="mx-0 my-1.5 md:mx-6 md:my-3"
                   >
                     <Button variant="primary" className="w-full">

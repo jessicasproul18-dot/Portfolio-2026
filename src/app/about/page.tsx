@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageHeader } from '@/componentsAMP/Sections/Hero/PageHeader';
 import { AboutStorySection } from '@/componentsAMP/Sections/Content/AboutStorySection';
+import { FullBleedParallaxTwoColumnContactForm } from '@/componentsAMP/Sections/Contact/FullBleedParallaxTwoColumnContactForm';
 import { Button } from '@/components/UI/Button';
 import { getSiteConfig } from '@/lib/siteConfig';
 
@@ -15,6 +16,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AboutPage() {
+  const siteConfig = await getSiteConfig();
+
   return (
     <main>
       <PageHeader
@@ -30,12 +33,18 @@ export default async function AboutPage() {
             <Button variant="primaryOutline" size="sm" asChild>
               <Link href="/">Back to homepage</Link>
             </Button>
-            <Button variant="primary" size="sm" asChild>
-              <Link href="/#contact">Contact</Link>
-            </Button>
           </div>
         </div>
       </section>
+
+      <FullBleedParallaxTwoColumnContactForm
+        siteConfig={{
+          email: siteConfig.email,
+          phone: siteConfig.phone,
+          address: siteConfig.address,
+          linkedin: siteConfig.linkedin,
+        }}
+      />
     </main>
   );
 }

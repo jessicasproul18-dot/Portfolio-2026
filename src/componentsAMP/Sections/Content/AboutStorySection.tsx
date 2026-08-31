@@ -58,11 +58,11 @@ const STORY_BLOCKS: StoryBlock[] = [
     imageSrc: '/images/headshot.png',
     imageAlt: 'Jessica Sproul headshot',
     imageOnRight: true,
-    ctaLabel: 'Contact',
-    ctaHref: '/#contact',
     secondaryCtaLabel: 'View resume',
     secondaryCtaHref: '/resume/jessica-sproul-resume.pdf',
     secondaryCtaDownload: true,
+    ctaLabel: 'Contact',
+    ctaHref: '#contact',
     paragraphs: [
       'I am a product designer focused on UX, with 3 years of experience that spans from visual design to front-end development.',
       'I would describe myself as a UX/UI designer with a wide range of skills. I have a graphic design degree with a focus in UX design, and an anthropology degree from the University of Oregon. My mix of sociological and design knowledge helps me shape product flows that stay grounded in human empathy while supporting business goals like adoption, retention, and trust.',

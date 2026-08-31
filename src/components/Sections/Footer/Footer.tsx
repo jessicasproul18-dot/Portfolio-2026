@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * **CURSOR INFO**
  * SECTION TYPE: Site footer with links and contact
@@ -7,13 +9,14 @@
  * CONTENT ELEMENTS: Name, nav links, contact info, copyright
  * CONVERSION ROLE: Navigation, contact, trust
  * IDEAL POSITION: Bottom of page
- * NOTES / MODIFIERS: Accepts optional className, no client directive (server-safe)
+ * NOTES / MODIFIERS: Contact explore link scrolls to #contact on home/about
  */
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Mail, Phone } from 'lucide-react';
 import { format } from 'date-fns';
-import { navigationItems } from '@/lib/navigation';
+import { getNavigationItems } from '@/lib/navigation';
 import type { SiteConfig } from '@/lib/siteConfig';
 
 type FooterProps = {
@@ -22,6 +25,8 @@ type FooterProps = {
 };
 
 export function Footer({ className, siteConfig }: FooterProps) {
+  const pathname = usePathname();
+  const navItems = getNavigationItems(pathname);
   const { site, email, phone, address } = siteConfig;
   const mailHref = `mailto:${email}`;
   const telHref = `tel:${phone}`;
@@ -42,9 +47,9 @@ export function Footer({ className, siteConfig }: FooterProps) {
           <div className="space-y-6">
             <h4 className="text-xl font-semibold uppercase tracking-wide">Explore</h4>
             <div className="space-y-3">
-              {navigationItems.map((item) => (
+              {navItems.map((item) => (
                 <a
-                  key={item.href}
+                  key={item.label}
                   href={item.href}
                   className="block text-zinc-600 transition-colors hover:text-primary-500"
                 >

@@ -49,7 +49,7 @@ const ScrollToAnchor = () => {
 
       let url: URL;
       try {
-        url = new URL(href, window.location.origin);
+        url = new URL(href, window.location.href);
       } catch {
         return;
       }

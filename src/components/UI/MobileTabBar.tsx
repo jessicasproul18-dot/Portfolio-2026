@@ -8,6 +8,7 @@ import { tv, type VariantProps } from "tailwind-variants";
 
 import { cx } from "@/lib/utils";
 import { isFilledSiteField } from "@/lib/siteFieldUtils";
+import { getContactHref } from "@/lib/navigation";
 
 const mobileTabBarVariants = tv({
   base: [
@@ -74,6 +75,10 @@ export function MobileTabBar({
 }: MobileTabBarProps) {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const resolvedMessageLink =
+    !messageLink || messageLink === "/#contact" || messageLink === "#contact"
+      ? getContactHref(pathname)
+      : messageLink;
   const showEmailTab = isFilledSiteField(contactEmail);
   const showPhoneTab = isFilledSiteField(contactPhone);
   const [isScrollVisible, setIsScrollVisible] = useState(false);
@@ -154,7 +159,7 @@ export function MobileTabBar({
       </a>
       ) : null}
       <a
-        href={messageLink}
+        href={resolvedMessageLink}
         className={tabLinkBase}
         aria-label="Message"
       >
