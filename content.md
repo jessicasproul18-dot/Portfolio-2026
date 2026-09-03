@@ -6,7 +6,7 @@ Business Name: Jessica Sproul
 
 Business Phone: (971) 281-4298
 
-Business Email: jsdesigns@outlook.com
+Business Email: jsprouldesigns@outlook.com
 
 Contact: LinkedIn (https://www.linkedin.com/in/jessica-sproul-8212a52a5/)
 
