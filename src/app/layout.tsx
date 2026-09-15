@@ -6,7 +6,6 @@ import ScrollToTop from "@/components/UI/ScrollToTop";
 import ScrollToAnchor from "@/components/UI/ScrollToAnchor";
 import ServiceWorkerRegister from "@/components/UI/ServiceWorkerRegister";
 import { PWAInstallProvider } from "@/components/UI/PWAInstallProvider";
-import { MobileTabBar } from "@/components/UI/MobileTabBar";
 import { Footer } from "@/components/Sections/Footer/Footer";
 import { Navigation } from "@/components/Sections/Navigation/Navigation";
 import { getSiteConfig } from "@/lib/siteConfig";
@@ -19,6 +18,11 @@ export async function generateMetadata(): Promise<Metadata> {
     manifest: "/manifest.json",
     icons: {
       icon: [
+        {
+          url: "/favicon.ico",
+          sizes: "32x32",
+          type: "image/png",
+        },
         {
           url: "/icons/favicon-32x32.png",
           sizes: "32x32",
@@ -35,7 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
           type: "image/png",
         },
       ],
-      shortcut: "/icons/favicon-32x32.png",
+      shortcut: "/favicon.ico",
       apple: [
         {
           url: "/icons/apple-touch-icon.png",
@@ -86,12 +90,7 @@ export default async function RootLayout({
           />
           <ScrollPosition />
           {children}
-          <MobileTabBar
-            contactEmail={`mailto:${siteConfig.email}`}
-            contactPhone={`tel:${siteConfig.phone}`}
-            messageLink="/#contact"
-          />
-          <Footer className="pb-22 md:pb-0" siteConfig={siteConfig} />
+          <Footer siteConfig={siteConfig} />
         </PWAInstallProvider>
       </body>
     </html>

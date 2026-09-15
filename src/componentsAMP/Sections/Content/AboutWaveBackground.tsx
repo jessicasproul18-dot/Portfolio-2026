@@ -140,18 +140,6 @@ export function AboutWaveBackground({
     let dpr = 1;
     let time = 0;
 
-    const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const rect = container.getBoundingClientRect();
-      width = Math.max(1, Math.floor(rect.width));
-      height = Math.max(1, Math.floor(rect.height));
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-
     const resolveBaseYs = () => {
       const anchors = anchorsRef.current;
       if (anchors && anchors.length > 0) {
@@ -163,7 +151,11 @@ export function AboutWaveBackground({
     };
 
     const paint = (mx: number, my: number, phaseBase: number) => {
+      if (width <= 0 || height <= 0) return;
       ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#f3f2f5';
+      ctx.fillRect(0, 0, width, height);
+
       const baseYs = resolveBaseYs();
 
       for (let i = 0; i < baseYs.length; i += 1) {
@@ -190,6 +182,26 @@ export function AboutWaveBackground({
           !reduceMotion,
         );
       }
+    };
+
+    const resize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = container.getBoundingClientRect();
+      const nextWidth = Math.max(1, Math.ceil(rect.width));
+      const nextHeight = Math.max(1, Math.ceil(rect.height));
+
+      if (nextWidth === width && nextHeight === height) return;
+
+      width = nextWidth;
+      height = nextHeight;
+      // Bitmap size MUST match CSS size — a taller bitmap gets scaled down by the
+      // browser and creates a hard light band cutting through the headline.
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      paint(mouseX.get(), mouseY.get(), time);
     };
 
     const draw = () => {
@@ -224,7 +236,9 @@ export function AboutWaveBackground({
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       aria-hidden="true"
     >
-      {dotsOnly ? null : <canvas ref={canvasRef} className="h-full w-full" />}
+      {dotsOnly ? null : (
+        <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full" />
+      )}
       {AMBIENT_DOTS.map((dot) => (
         <FloatingDot
           key={dot.id}

@@ -144,8 +144,8 @@ export function Navigation({ siteLabel, phone, email }: NavigationProps) {
               <MobileMenuHeader className="bg-zinc-900">
                 <AgentProfile
                   variant="dark"
-                  ownerName="Alexandra Reed"
-                  businessName={siteLabel}
+                  ownerName={siteLabel}
+                  avatar="/icons/icon-192x192.png"
                 />
               </MobileMenuHeader>
               <div className="relative flex min-h-0 grow flex-col">

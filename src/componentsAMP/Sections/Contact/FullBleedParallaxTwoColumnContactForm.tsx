@@ -120,7 +120,7 @@ export function FullBleedParallaxTwoColumnContactForm({
         reduceMotion={reduceMotion}
       />
 
-      <div className="container mx-auto relative z-10 px-4 py-[6rem] md:px-8 lg:px-12">
+      <div className="container mx-auto relative z-10 px-4 py-[3rem] md:px-8 md:py-[6rem] lg:px-12">
         <motion.div
           className="space-y-8"
           initial="hidden"

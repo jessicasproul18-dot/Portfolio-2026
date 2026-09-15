@@ -21,16 +21,17 @@ export function FeaturedWorkAlternatingSection() {
   return (
     <section
       id="work"
-      className="scroll-mt-24 bg-white px-4 py-[6rem] md:px-8 lg:px-12"
+      className="scroll-mt-24 bg-white px-4 pt-[3rem] pb-[3rem] md:px-8 md:py-[6rem] lg:px-12"
       aria-label="Featured work"
     >
-      <div className="container mx-auto space-y-24">
-        <header className="mx-auto max-w-2xl text-center">
+      <div className="container mx-auto">
+        <header className="mx-auto mb-8 max-w-2xl text-center md:mb-24">
           <h2 className="text-3xl font-normal uppercase tracking-tight text-zinc-900 sm:text-4xl md:text-5xl">
             Featured work
           </h2>
         </header>
 
+        <div className="space-y-16 md:space-y-24">
         {projects.map((project, index) => {
           const imageOnRight = index % 2 === 1;
 
@@ -80,8 +81,9 @@ export function FeaturedWorkAlternatingSection() {
             </article>
           );
         })}
+        </div>
 
-        <div className="flex flex-col items-start gap-6 border-t border-zinc-200 pt-[3rem]">
+        <div className="mt-24 flex flex-col items-start gap-6 border-t border-zinc-200 pt-[3rem]">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500">See</p>
           <nav aria-label="Other work categories">
             <ul className="flex flex-wrap gap-2 md:gap-3">

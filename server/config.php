@@ -24,11 +24,11 @@ if ($config !== null && isset($config['site']) && is_string($config['site']) && 
 if ($config !== null && !empty($config['email_from'])) {
     define('RESEND_FROM', SITE_NAME . ' <' . $config['email_from'] . '>');
 } else {
-    define('RESEND_FROM', 'webteam@advantagemediapartners.com');
+    define('RESEND_FROM', 'Jessica Sproul <jsprouldesigns@outlook.com>');
 }
 
 if ($config !== null && !empty($config['email_to']) && is_string($config['email_to'])) {
     define('RESEND_SEND_TO', trim($config['email_to']));
 } else {
-    define('RESEND_SEND_TO', 'webteam@advantagemediapartners.com');
+    define('RESEND_SEND_TO', 'jsprouldesigns@outlook.com');
 }

@@ -24,6 +24,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from 'react';
 import {
+  AnimatePresence,
   motion,
   useMotionValue,
   useReducedMotion,
@@ -405,7 +406,7 @@ const HoverRevealPortrait = ({
       </div>
       </div>
 
-      <div className="flex w-full max-w-md flex-col items-start gap-8 md:col-start-1 md:row-start-2 lg:max-w-lg">
+      <div className="flex w-full max-w-md flex-col items-start md:col-start-1 md:row-start-2 lg:max-w-lg">
         <button
           type="button"
           onClick={handleRevealAll}
@@ -420,50 +421,46 @@ const HoverRevealPortrait = ({
           Hover or click to reveal
         </button>
 
-        {showRevealCtas ? (
-          <div
-            className={[
-              'flex flex-wrap items-center justify-start gap-3 transition-opacity duration-1000 ease-out delay-300 md:gap-4',
-              isFullyRevealed
-                ? 'opacity-100'
-                : 'pointer-events-none opacity-0 delay-0',
-            ].join(' ')}
-            aria-hidden={!isFullyRevealed}
-          >
-            {showRevealCta ? (
-              <Button
-                variant="primary"
-                asChild={isFullyRevealed}
-                size="sm"
-                tabIndex={isFullyRevealed ? undefined : -1}
-              >
-                {isFullyRevealed ? (
-                  <Link href={revealCtaHref!}>
-                    <span>{revealCtaLabel}</span>
-                  </Link>
-                ) : (
-                  <span>{revealCtaLabel}</span>
-                )}
-              </Button>
-            ) : null}
-            {showRevealSecondaryCta ? (
-              <Button
-                variant="primaryOutline"
-                asChild={isFullyRevealed}
-                size="sm"
-                tabIndex={isFullyRevealed ? undefined : -1}
-              >
-                {isFullyRevealed ? (
-                  <Link href={revealSecondaryCtaHref!}>
-                    <span>{revealSecondaryCtaLabel}</span>
-                  </Link>
-                ) : (
-                  <span>{revealSecondaryCtaLabel}</span>
-                )}
-              </Button>
-            ) : null}
-          </div>
-        ) : null}
+        <AnimatePresence initial={false}>
+          {showRevealCtas && isFullyRevealed ? (
+            <motion.div
+              key="reveal-ctas"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.55, ease: [0.22, 0.82, 0.28, 1] }}
+              className="w-full overflow-hidden"
+            >
+              <div className="flex flex-wrap items-center justify-start gap-3 pt-8 md:gap-4">
+                <motion.div
+                  initial={{ y: -16, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{
+                    duration: 0.45,
+                    delay: 0.08,
+                    ease: [0.22, 0.82, 0.28, 1],
+                  }}
+                  className="flex flex-wrap items-center justify-start gap-3 md:gap-4"
+                >
+                  {showRevealCta ? (
+                    <Button variant="primary" asChild size="sm">
+                      <Link href={revealCtaHref!}>
+                        <span>{revealCtaLabel}</span>
+                      </Link>
+                    </Button>
+                  ) : null}
+                  {showRevealSecondaryCta ? (
+                    <Button variant="primaryOutline" asChild size="sm">
+                      <Link href={revealSecondaryCtaHref!}>
+                        <span>{revealSecondaryCtaLabel}</span>
+                      </Link>
+                    </Button>
+                  ) : null}
+                </motion.div>
+              </div>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </div>
     </div>
   );
@@ -545,7 +542,7 @@ export function TwoColumnImageRightSection({
     <div
       ref={sectionRef}
       id="about"
-      className="relative scroll-mt-24 w-full overflow-x-clip bg-nav/40"
+      className="relative scroll-mt-24 w-full overflow-x-clip bg-[#f3f2f5]"
       onPointerMove={interactive ? handlePointerMove : undefined}
     >
       {interactive ? (

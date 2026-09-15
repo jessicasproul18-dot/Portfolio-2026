@@ -36,7 +36,7 @@ export function HomeScrollStage({ siteConfig }: HomeScrollStageProps) {
         revealCtaHref="#contact"
         revealSecondaryCtaLabel="Learn more"
         revealSecondaryCtaHref="/about"
-        className="pt-[11rem] pb-[6rem]"
+        className="pt-[11rem] pb-[3rem] md:pb-[6rem]"
       />
 
       <FeaturedWorkAlternatingSection />

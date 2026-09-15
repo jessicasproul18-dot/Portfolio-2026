@@ -34,7 +34,7 @@ export function Footer({ className, siteConfig }: FooterProps) {
 
   return (
     <div className={`bg-white text-zinc-900 overflow-hidden ${className}`}>
-      <div className="container mx-auto py-6 px-4 md:py-16 md:px-8 lg:py-24 lg:px-12">
+      <div className="container mx-auto py-[3rem] px-4 md:py-16 md:px-8 lg:py-24 lg:px-12">
         <div className="grid gap-12 md:grid-cols-3">
           <div>
             <h3 className="text-lg font-normal uppercase tracking-[2px] text-primary-500">
