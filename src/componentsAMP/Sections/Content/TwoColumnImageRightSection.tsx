@@ -601,7 +601,12 @@ export function TwoColumnImageRightSection({
                     id="about-heading"
                     className="max-w-xl text-pretty text-[1.75rem] font-normal leading-snug tracking-tight text-zinc-900 sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-tight"
                   >
-                    {headingLine1 ? <span className="block">{headingLine1}</span> : null}
+                    {headingLine1 ? (
+                      <span className="block">{headingLine1}</span>
+                    ) : null}
+                    {headingLine1 && (headingLine2 || headingLine3 || headingLine4)
+                      ? ' '
+                      : null}
                     {[headingLine2, headingLine3, headingLine4]
                       .filter(Boolean)
                       .join(' ') || null}
