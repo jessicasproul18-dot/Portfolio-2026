@@ -16,6 +16,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: siteConfig.title ?? siteConfig.site,
     description: siteConfig.description,
     manifest: "/manifest.json",
+    verification: {
+      google: "SBk-mxU2ymP0Gq_x5kYmh0hKxFdpEfIXPcyho1WFlOQ",
+    },
     icons: {
       icon: [
         {
