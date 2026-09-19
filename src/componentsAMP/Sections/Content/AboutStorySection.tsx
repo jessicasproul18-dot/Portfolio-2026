@@ -296,7 +296,7 @@ export function AboutStorySection() {
     <>
     <div
       ref={sectionRef}
-      className="relative overflow-hidden bg-nav/40 px-4 py-[6rem] md:px-8 lg:px-12"
+      className="relative overflow-hidden bg-nav/40 px-4 py-[3rem] md:px-8 md:py-[6rem] lg:px-12"
       onPointerMove={handlePointerMove}
     >
       <AboutWaveBackground
@@ -425,7 +425,7 @@ export function AboutStorySection() {
       </div>
     </div>
 
-      <section className="border-t border-zinc-200 bg-white px-4 py-[6rem] md:px-8 lg:px-12">
+      <section className="border-t border-zinc-200 bg-white px-4 py-[3rem] md:px-8 md:py-[6rem] lg:px-12">
         <div className="container mx-auto space-y-[3rem]">
           <div className="mx-auto max-w-2xl space-y-4 text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary-600">

@@ -71,11 +71,11 @@ export function GraphicDesignGallerySection() {
   return (
     <>
       <section
-        className="bg-white py-[6rem] px-4 md:px-8 lg:px-12"
+        className="bg-white py-[3rem] px-4 md:px-8 lg:px-12"
         aria-label="Graphic design gallery"
       >
         <div className="container mx-auto max-w-6xl">
-          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-12">
+          <ul className="grid grid-cols-1 gap-16 sm:grid-cols-2 sm:gap-8 md:gap-8 lg:grid-cols-3 lg:gap-12">
             {graphicDesignProjects.map((project) => {
               const cover = project.images[0];
               if (!cover) return null;

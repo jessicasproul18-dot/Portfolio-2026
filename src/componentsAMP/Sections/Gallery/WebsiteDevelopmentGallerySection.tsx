@@ -74,11 +74,11 @@ export function WebsiteDevelopmentGallerySection() {
   return (
     <>
       <section
-        className="bg-white py-[6rem] px-4 md:px-8 lg:px-12"
+        className="bg-white py-[3rem] px-4 md:px-8 lg:px-12"
         aria-label="Website development gallery"
       >
         <div className="container mx-auto max-w-6xl">
-          <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-8 lg:grid-cols-4 lg:gap-12">
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-16 sm:grid-cols-3 sm:gap-8 md:gap-8 lg:grid-cols-4 lg:gap-12">
             {websiteDevelopmentProjects.map((project) => {
               const cover = project.images[0];
               if (!cover) return null;
