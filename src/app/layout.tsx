@@ -5,7 +5,6 @@ import ScrollPosition from "@/components/UI/ScrollPosition";
 import ScrollToTop from "@/components/UI/ScrollToTop";
 import ScrollToAnchor from "@/components/UI/ScrollToAnchor";
 import ServiceWorkerRegister from "@/components/UI/ServiceWorkerRegister";
-import { PWAInstallProvider } from "@/components/UI/PWAInstallProvider";
 import { Footer } from "@/components/Sections/Footer/Footer";
 import { Navigation } from "@/components/Sections/Navigation/Navigation";
 import { getSiteConfig } from "@/lib/siteConfig";
@@ -81,20 +80,18 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} relative antialiased`}
         suppressHydrationWarning
       >
-        <PWAInstallProvider>
-          <ScrollToAnchor />
-          <ServiceWorkerRegister />
-          <div id='topOfPage' className='absolute -top-96'>Top of page</div>
-          <ScrollToTop />
-          <Navigation
-            siteLabel={siteConfig.site}
-            phone={siteConfig.phone}
-            email={siteConfig.email}
-          />
-          <ScrollPosition />
-          {children}
-          <Footer siteConfig={siteConfig} />
-        </PWAInstallProvider>
+        <ScrollToAnchor />
+        <ServiceWorkerRegister />
+        <div id='topOfPage' className='absolute -top-96'>Top of page</div>
+        <ScrollToTop />
+        <Navigation
+          siteLabel={siteConfig.site}
+          phone={siteConfig.phone}
+          email={siteConfig.email}
+        />
+        <ScrollPosition />
+        {children}
+        <Footer siteConfig={siteConfig} />
       </body>
     </html>
   );

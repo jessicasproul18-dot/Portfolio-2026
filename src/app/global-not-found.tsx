@@ -5,7 +5,6 @@ import { getSiteConfig } from "@/lib/siteConfig";
 import { Navigation } from "@/components/Sections/Navigation/Navigation";
 import { Footer } from "@/components/Sections/Footer/Footer";
 import { NotFoundSection } from "@/components/Sections/404/NotFoundSection";
-import { PWAInstallProvider } from "@/components/UI/PWAInstallProvider";
 
 const geistSans = Geist({
   variable: "--font-body",
@@ -32,15 +31,13 @@ export default async function GlobalNotFound() {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <PWAInstallProvider>
-          <Navigation
-            siteLabel={siteConfig.site}
-            phone={siteConfig.phone}
-            email={siteConfig.email}
-          />
-          <NotFoundSection siteLabel={siteConfig.site} />
-          <Footer siteConfig={siteConfig} />
-        </PWAInstallProvider>
+        <Navigation
+          siteLabel={siteConfig.site}
+          phone={siteConfig.phone}
+          email={siteConfig.email}
+        />
+        <NotFoundSection siteLabel={siteConfig.site} />
+        <Footer siteConfig={siteConfig} />
       </body>
     </html>
   );
