@@ -9,7 +9,7 @@
  * CONTENT ELEMENTS: Interactive tile portrait or static headshot, optional eyebrow/body, dual CTAs
  * CONVERSION ROLE: Introduce the designer and drive to work or contact
  * IDEAL POSITION: Directly under the hero on the homepage, or under page header on about
- * NOTES / MODIFIERS: interactive prop (default true) toggles hover-reveal tiles/magnifier/ambient dots/cursor waves vs static aspect-[3/4] portrait; click/Enter/Space reveals all tiles; optional reveal CTA appears when fully revealed; reduced-motion shows full static image
+ * NOTES / MODIFIERS: interactive prop (default true) toggles hover-reveal cover tiles/magnifier/ambient dots/cursor waves vs static aspect-[3/4] portrait; one base image under covers; click/tap/Enter/Space reveals all; optional reveal CTA when fully revealed; reduced-motion keeps click-to-reveal without hover chrome
  */
 
 import Image from 'next/image';
@@ -37,10 +37,10 @@ const GRID = 6;
 const TILE_COUNT = GRID * GRID;
 /** ~40% of tiles start open so the image peeks through */
 const OPEN_RATIO = 0.4;
-/** Slower fade when tiles open (hover or click) */
-const TILE_FADE_DURATION = 0.55;
+/** Fade when cover tiles lift (hover or click) */
+const TILE_FADE_DURATION_S = 0.35;
 /** Delay between each remaining tile on click-to-reveal-all */
-const CLICK_REVEAL_STAGGER_MS = 60;
+const CLICK_REVEAL_STAGGER_MS = 28;
 
 /**
  * Deterministic irregular open-tile set (stable across renders, not a checkerboard).
@@ -166,12 +166,7 @@ const HoverRevealPortrait = ({
   }, []);
 
   const tiles = useMemo(
-    () =>
-      Array.from({ length: TILE_COUNT }, (_, index) => ({
-        index,
-        col: index % GRID,
-        row: Math.floor(index / GRID),
-      })),
+    () => Array.from({ length: TILE_COUNT }, (_, index) => index),
     [],
   );
 
@@ -188,6 +183,13 @@ const HoverRevealPortrait = ({
     revealTimeoutsRef.current.forEach((id) => window.clearTimeout(id));
     revealTimeoutsRef.current = [];
 
+    if (revealedRef.current.size >= TILE_COUNT) return;
+
+    if (reduceMotion) {
+      setRevealed(new Set(ALL_TILES));
+      return;
+    }
+
     const remaining = Array.from(ALL_TILES).filter(
       (index) => !revealedRef.current.has(index),
     );
@@ -197,10 +199,10 @@ const HoverRevealPortrait = ({
       }, i * CLICK_REVEAL_STAGGER_MS);
       revealTimeoutsRef.current.push(id);
     });
-  }, [handleReveal]);
+  }, [handleReveal, reduceMotion]);
 
-  const revealFromPointer = useCallback(
-    (event: ReactPointerEvent<HTMLDivElement>) => {
+  const updateCursorAndTile = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>, openTile: boolean) => {
       const grid = gridRef.current;
       const frame = frameRef.current;
       if (!grid || !frame) return;
@@ -208,19 +210,44 @@ const HoverRevealPortrait = ({
       const frameRect = frame.getBoundingClientRect();
       if (gridRect.width <= 0 || gridRect.height <= 0) return;
 
-      const x = event.clientX - gridRect.left;
-      const y = event.clientY - gridRect.top;
       setCursorPos({
         x: event.clientX - frameRect.left,
         y: event.clientY - frameRect.top,
       });
 
+      if (!openTile) return;
+
+      const x = event.clientX - gridRect.left;
+      const y = event.clientY - gridRect.top;
       if (x < 0 || y < 0 || x > gridRect.width || y > gridRect.height) return;
       const col = Math.min(GRID - 1, Math.floor((x / gridRect.width) * GRID));
       const row = Math.min(GRID - 1, Math.floor((y / gridRect.height) * GRID));
       handleReveal(row * GRID + col);
     },
     [handleReveal],
+  );
+
+  const handlePointerMove = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      if (reduceMotion) {
+        updateCursorAndTile(event, false);
+        return;
+      }
+      updateCursorAndTile(event, true);
+    },
+    [reduceMotion, updateCursorAndTile],
+  );
+
+  const handlePointerDown = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      if (event.button !== 0) return;
+      updateCursorAndTile(event, !reduceMotion);
+      // Touch/pen have no reliable hover — reveal everything on tap.
+      if (event.pointerType === 'touch' || event.pointerType === 'pen') {
+        handleRevealAll();
+      }
+    },
+    [handleRevealAll, reduceMotion, updateCursorAndTile],
   );
 
   const handleClick = useCallback(() => {
@@ -237,173 +264,152 @@ const HoverRevealPortrait = ({
   );
 
   const isFullyRevealed = revealed.size >= TILE_COUNT;
-  const showMagnifier = isHovering && !isFullyRevealed;
-  const showHelloCursor = isHovering && isFullyRevealed;
+  const showMagnifier =
+    !reduceMotion && isHovering && !isFullyRevealed;
+  const showHelloCursor =
+    !reduceMotion && isHovering && isFullyRevealed;
   const showRevealCta = Boolean(revealCtaLabel && revealCtaHref);
   const showRevealSecondaryCta = Boolean(
     revealSecondaryCtaLabel && revealSecondaryCtaHref,
   );
   const showRevealCtas = showRevealCta || showRevealSecondaryCta;
-
-  if (reduceMotion) {
-    return (
-      <div className="contents">
-        <div className="relative w-full max-w-md md:col-start-1 md:row-start-1 lg:max-w-lg">
-          <div
-            data-reveal-frame
-            className="relative aspect-square w-full overflow-hidden rounded-2xl bg-secondary-950"
-          >
-            <Image
-              alt={imageAlt}
-              src={underSrc}
-              quality={80}
-              fill
-              priority
-              sizes="(min-width: 1024px) 32rem, (min-width: 768px) 28rem, 100vw"
-              className="rounded-2xl object-cover object-center"
-            />
-          </div>
-        </div>
-        <div className="flex w-full max-w-md flex-col items-start gap-8 md:col-start-1 md:row-start-2 lg:max-w-lg">
-          <p className="text-left text-xs font-semibold uppercase tracking-[0.22em] text-primary-600 opacity-40">
-            Hover or click to reveal
-          </p>
-          {showRevealCtas ? (
-            <div className="flex flex-wrap items-center justify-start gap-3 md:gap-4">
-              {showRevealCta ? (
-                <Button variant="primary" asChild size="sm">
-                  <Link href={revealCtaHref!}>
-                    <span>{revealCtaLabel}</span>
-                  </Link>
-                </Button>
-              ) : null}
-              {showRevealSecondaryCta ? (
-                <Button variant="primaryOutline" asChild size="sm">
-                  <Link href={revealSecondaryCtaHref!}>
-                    <span>{revealSecondaryCtaLabel}</span>
-                  </Link>
-                </Button>
-              ) : null}
-            </div>
-          ) : null}
-        </div>
-      </div>
-    );
-  }
+  const tileTransition = reduceMotion
+    ? 'none'
+    : `opacity ${TILE_FADE_DURATION_S}s cubic-bezier(0.22, 0.82, 0.28, 1)`;
 
   return (
     <div className="contents">
       <div className="relative w-full max-w-md md:col-start-1 md:row-start-1 lg:max-w-lg">
-      <div
-        ref={frameRef}
-        data-reveal-frame
-        className={[
-          'relative aspect-square w-full overflow-hidden rounded-2xl bg-transparent',
-          isHovering ? 'cursor-none' : 'cursor-pointer',
-        ].join(' ')}
-        role="button"
-        tabIndex={0}
-        aria-label={`${imageAlt}. Hover or click to reveal.`}
-        onPointerEnter={() => setIsHovering(true)}
-        onPointerLeave={() => setIsHovering(false)}
-        onPointerMove={revealFromPointer}
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
-      >
+        {/* Without JS, show the full photo instead of a stuck mosaic */}
+        <noscript>
+          <style>
+            {`[data-reveal-mosaic]{display:none!important}[data-reveal-fallback]{display:block!important}`}
+          </style>
+        </noscript>
         <div
-          ref={gridRef}
+          ref={frameRef}
+          data-reveal-frame
           className={[
-            'absolute inset-0 z-10 grid touch-none',
-            isHovering ? 'cursor-none' : 'cursor-pointer',
+            'relative aspect-square w-full overflow-hidden rounded-2xl bg-transparent',
+            !reduceMotion && isHovering ? 'cursor-none' : 'cursor-pointer',
           ].join(' ')}
-          style={{
-            gridTemplateColumns: `repeat(${GRID}, 1fr)`,
-            gridTemplateRows: `repeat(${GRID}, 1fr)`,
-          }}
+          role="button"
+          tabIndex={0}
+          aria-label={`${imageAlt}. Click or hover over the photo to reveal.`}
+          onPointerEnter={() => setIsHovering(true)}
+          onPointerLeave={() => setIsHovering(false)}
+          onPointerMove={handlePointerMove}
+          onPointerDown={handlePointerDown}
+          onClick={handleClick}
+          onKeyDown={handleKeyDown}
         >
-          {tiles.map(({ index, col, row }) => {
-            const isOpen = revealed.has(index);
-
-            return (
-              <motion.div
-                key={index}
-                className="relative h-full w-full overflow-hidden"
-                initial={false}
-                animate={{ opacity: isOpen ? 1 : 0 }}
-                transition={{
-                  duration: TILE_FADE_DURATION,
-                  ease: [0.22, 0.82, 0.28, 1],
-                }}
-                aria-hidden="true"
-              >
-                {/* Full-frame image shifted into this cell — keeps object-cover, no squash */}
-                <div
-                  className="absolute"
-                  style={{
-                    width: `${GRID * 100}%`,
-                    height: `${GRID * 100}%`,
-                    left: `${-col * 100}%`,
-                    top: `${-row * 100}%`,
-                  }}
-                >
-                  <Image
-                    alt=""
-                    src={underSrc}
-                    quality={80}
-                    fill
-                    priority={index === 0}
-                    sizes="(min-width: 1024px) 32rem, (min-width: 768px) 28rem, 100vw"
-                    className="object-cover object-center"
-                  />
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {showMagnifier ? (
+          {/* Full photo fallback when JS is disabled */}
           <div
-            className="pointer-events-none absolute z-30 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/50"
+            data-reveal-fallback
+            className="pointer-events-none absolute inset-0 hidden"
+            aria-hidden="true"
+          >
+            <Image
+              alt=""
+              src={underSrc}
+              quality={80}
+              fill
+              sizes="(min-width: 1024px) 32rem, (min-width: 768px) 28rem, 100vw"
+              className="rounded-2xl object-cover object-center"
+              draggable={false}
+            />
+          </div>
+
+          {/* Preload once; mosaic cells reuse the same URL from cache */}
+          <Image
+            alt={imageAlt}
+            src={underSrc}
+            quality={80}
+            fill
+            priority
+            sizes="(min-width: 1024px) 32rem, (min-width: 768px) 28rem, 100vw"
+            className="pointer-events-none absolute inset-0 opacity-0"
+            draggable={false}
+          />
+
+          <div
+            ref={gridRef}
+            data-reveal-mosaic
+            className="pointer-events-none absolute inset-0 z-10 grid"
             style={{
-              left: cursorPos.x,
-              top: cursorPos.y,
+              gridTemplateColumns: `repeat(${GRID}, 1fr)`,
+              gridTemplateRows: `repeat(${GRID}, 1fr)`,
             }}
             aria-hidden="true"
           >
-            <svg
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle
-                cx="10"
-                cy="10"
-                r="6.25"
-                className="fill-white/50 stroke-primary-600"
-                strokeWidth="2.25"
-              />
-              <path
-                d="M15.2 15.2L21 21"
-                className="stroke-primary-600"
-                strokeWidth="2.25"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
-        ) : null}
+            {tiles.map((index) => {
+              const isOpen = revealed.has(index);
+              const col = index % GRID;
+              const row = Math.floor(index / GRID);
 
-        {showHelloCursor ? (
-          <div
-            className="pointer-events-none absolute z-30 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap bg-black px-2.5 py-1 text-xs font-medium tracking-wide text-white"
-            style={{ left: cursorPos.x, top: cursorPos.y }}
-            aria-hidden="true"
-          >
-            Hello there!
+              return (
+                <div key={index} className="relative h-full w-full overflow-hidden">
+                  {/* Closed cells stay empty (transparent) so section waves show through */}
+                  <div
+                    className="absolute bg-cover bg-center"
+                    style={{
+                      width: `${GRID * 100}%`,
+                      height: `${GRID * 100}%`,
+                      left: `${-col * 100}%`,
+                      top: `${-row * 100}%`,
+                      backgroundImage: `url(${underSrc})`,
+                      opacity: isOpen ? 1 : 0,
+                      transition: tileTransition,
+                    }}
+                  />
+                </div>
+              );
+            })}
           </div>
-        ) : null}
-      </div>
+
+          {showMagnifier ? (
+            <div
+              className="pointer-events-none absolute z-30 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/50"
+              style={{
+                left: cursorPos.x,
+                top: cursorPos.y,
+              }}
+              aria-hidden="true"
+            >
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="10"
+                  cy="10"
+                  r="6.25"
+                  className="fill-white/50 stroke-primary-600"
+                  strokeWidth="2.25"
+                />
+                <path
+                  d="M15.2 15.2L21 21"
+                  className="stroke-primary-600"
+                  strokeWidth="2.25"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+          ) : null}
+
+          {showHelloCursor ? (
+            <div
+              className="pointer-events-none absolute z-30 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap bg-black px-2.5 py-1 text-xs font-medium tracking-wide text-white"
+              style={{ left: cursorPos.x, top: cursorPos.y }}
+              aria-hidden="true"
+            >
+              Hello there!
+            </div>
+          ) : null}
+        </div>
       </div>
 
       <div className="flex w-full max-w-md flex-col items-start md:col-start-1 md:row-start-2 lg:max-w-lg">
@@ -418,26 +424,31 @@ const HoverRevealPortrait = ({
               : 'cursor-pointer opacity-100 hover:text-primary-700',
           ].join(' ')}
         >
-          Hover or click to reveal
+          {isFullyRevealed ? 'Revealed' : 'Click or hover over the photo to reveal'}
         </button>
 
         <AnimatePresence initial={false}>
           {showRevealCtas && isFullyRevealed ? (
             <motion.div
               key="reveal-ctas"
-              initial={{ height: 0, opacity: 0 }}
+              initial={
+                reduceMotion ? false : { height: 0, opacity: 0 }
+              }
               animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.55, ease: [0.22, 0.82, 0.28, 1] }}
+              exit={reduceMotion ? undefined : { height: 0, opacity: 0 }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.45,
+                ease: [0.22, 0.82, 0.28, 1],
+              }}
               className="w-full overflow-hidden"
             >
               <div className="flex flex-wrap items-center justify-start gap-3 pt-8 md:gap-4">
                 <motion.div
-                  initial={{ y: -16, opacity: 0 }}
+                  initial={reduceMotion ? false : { y: -16, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{
-                    duration: 0.45,
-                    delay: 0.08,
+                    duration: reduceMotion ? 0 : 0.4,
+                    delay: reduceMotion ? 0 : 0.06,
                     ease: [0.22, 0.82, 0.28, 1],
                   }}
                   className="flex flex-wrap items-center justify-start gap-3 md:gap-4"
