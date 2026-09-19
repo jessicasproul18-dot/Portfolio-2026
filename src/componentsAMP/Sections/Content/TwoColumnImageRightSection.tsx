@@ -38,9 +38,9 @@ const TILE_COUNT = GRID * GRID;
 /** ~40% of tiles start open so the image peeks through */
 const OPEN_RATIO = 0.4;
 /** Fade when cover tiles lift (hover or click) */
-const TILE_FADE_DURATION_S = 0.35;
+const TILE_FADE_DURATION_S = 0.6;
 /** Delay between each remaining tile on click-to-reveal-all */
-const CLICK_REVEAL_STAGGER_MS = 28;
+const CLICK_REVEAL_STAGGER_MS = 70;
 
 /**
  * Deterministic irregular open-tile set (stable across renders, not a checkerboard).
@@ -279,30 +279,42 @@ const HoverRevealPortrait = ({
 
   return (
     <div className="contents">
-      <div className="relative w-full max-w-md md:col-start-1 md:row-start-1 lg:max-w-lg">
-        {/* Without JS, show the full photo instead of a stuck mosaic */}
-        <noscript>
-          <style>
-            {`[data-reveal-mosaic]{display:none!important}[data-reveal-fallback]{display:block!important}`}
-          </style>
-        </noscript>
-        <div
-          ref={frameRef}
-          data-reveal-frame
-          className={[
-            'relative aspect-square w-full overflow-hidden rounded-2xl bg-transparent',
-            !reduceMotion && isHovering ? 'cursor-none' : 'cursor-pointer',
-          ].join(' ')}
-          role="button"
-          tabIndex={0}
-          aria-label={`${imageAlt}. Click or hover over the photo to reveal.`}
-          onPointerEnter={() => setIsHovering(true)}
-          onPointerLeave={() => setIsHovering(false)}
-          onPointerMove={handlePointerMove}
-          onPointerDown={handlePointerDown}
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
-        >
+      <button
+        type="button"
+        onClick={handleRevealAll}
+        disabled={isFullyRevealed}
+        className={[
+          'text-left text-xs font-semibold uppercase tracking-[0.22em] text-primary-600 transition-opacity duration-1000 ease-out md:col-start-1 md:row-start-1',
+          isFullyRevealed
+            ? 'cursor-default opacity-40'
+            : 'cursor-pointer opacity-100 hover:text-primary-700',
+        ].join(' ')}
+      >
+        Click or hover over the photo to reveal
+      </button>
+      {/* Without JS, show the full photo instead of a stuck mosaic */}
+      <noscript>
+        <style>
+          {`[data-reveal-mosaic]{display:none!important}[data-reveal-fallback]{display:block!important}`}
+        </style>
+      </noscript>
+      <div
+        ref={frameRef}
+        data-reveal-frame
+        className={[
+          'relative aspect-square w-full max-w-md overflow-hidden rounded-2xl bg-transparent md:col-start-1 md:row-start-2 md:max-w-lg',
+          !reduceMotion && isHovering ? 'cursor-none' : 'cursor-pointer',
+        ].join(' ')}
+        role="button"
+        tabIndex={0}
+        aria-label={`${imageAlt}. Click or hover over the photo to reveal.`}
+        onPointerEnter={() => setIsHovering(true)}
+        onPointerLeave={() => setIsHovering(false)}
+        onPointerMove={handlePointerMove}
+        onPointerDown={handlePointerDown}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+      >
           {/* Full photo fallback when JS is disabled */}
           <div
             data-reveal-fallback
@@ -409,24 +421,9 @@ const HoverRevealPortrait = ({
               Hello there!
             </div>
           ) : null}
-        </div>
       </div>
 
-      <div className="flex w-full max-w-md flex-col items-start md:col-start-1 md:row-start-2 lg:max-w-lg">
-        <button
-          type="button"
-          onClick={handleRevealAll}
-          disabled={isFullyRevealed}
-          className={[
-            'text-left text-xs font-semibold uppercase tracking-[0.22em] text-primary-600 transition-opacity duration-1000 ease-out',
-            isFullyRevealed
-              ? 'cursor-default opacity-40'
-              : 'cursor-pointer opacity-100 hover:text-primary-700',
-          ].join(' ')}
-        >
-          {isFullyRevealed ? 'Revealed' : 'Click or hover over the photo to reveal'}
-        </button>
-
+      <div className="flex w-full max-w-md flex-col items-start md:col-start-1 md:row-start-3 lg:max-w-lg">
         <AnimatePresence initial={false}>
           {showRevealCtas && isFullyRevealed ? (
             <motion.div
@@ -442,7 +439,7 @@ const HoverRevealPortrait = ({
               }}
               className="w-full overflow-hidden"
             >
-              <div className="flex flex-wrap items-center justify-start gap-3 pt-8 md:gap-4">
+              <div className="flex flex-wrap items-center justify-start gap-3 md:gap-4">
                 <motion.div
                   initial={reduceMotion ? false : { y: -16, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -582,7 +579,7 @@ export function TwoColumnImageRightSection({
             : undefined
         }
       >
-        <div className="grid items-start gap-x-4 gap-y-8 md:grid-cols-2 md:items-center md:gap-x-16 lg:gap-x-16">
+        <div className="grid items-start gap-x-4 gap-y-8 md:grid-cols-2 md:gap-x-16 lg:gap-x-16">
           {interactive ? (
             <HoverRevealPortrait
               imageSrc={imageSrc}
@@ -600,8 +597,14 @@ export function TwoColumnImageRightSection({
           )}
 
           {eyebrow || headingLine1 || headingLine2 || headingLine3 || headingLine4 || body ? (
-            <div className="space-y-8 md:col-start-2 md:row-start-1 md:self-center">
-              <header>
+            <div
+              className={[
+                'space-y-8 md:col-start-2',
+                interactive
+                  ? 'md:row-start-2 md:self-start'
+                  : 'md:row-start-1 md:self-center',
+              ].join(' ')}
+            >              <header>
                 {eyebrow ? (
                   <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-primary-600">
                     {eyebrow}

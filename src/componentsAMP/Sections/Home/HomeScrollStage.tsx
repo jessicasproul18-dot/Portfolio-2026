@@ -9,7 +9,7 @@
  * CONTENT ELEMENTS: About with interactive hover-reveal headshot as hero, alternating featured work, LinkedIn contact
  * CONVERSION ROLE: Guide from first impression through work into contact
  * IDEAL POSITION: Root of the homepage
- * NOTES / MODIFIERS: About section opens the page in place of a separate hero; interactive portrait on homepage; each block uses py-[6rem] (hero uses pt-[11rem] for nav)
+ * NOTES / MODIFIERS: About section opens the page in place of a separate hero; interactive portrait on homepage; each block uses py-[6rem] (hero uses nav clearance + matched vertical padding)
  */
 
 import { TwoColumnImageRightSection } from '@/componentsAMP/Sections/Content/TwoColumnImageRightSection';
@@ -36,7 +36,7 @@ export function HomeScrollStage({ siteConfig }: HomeScrollStageProps) {
         revealCtaHref="#contact"
         revealSecondaryCtaLabel="Learn more"
         revealSecondaryCtaHref="/about"
-        className="pt-[11rem] pb-[3rem] md:pb-[6rem]"
+        className="pt-[calc(80px+3rem)] pb-[3rem] md:pt-[11rem] md:pb-[6rem]"
       />
 
       <FeaturedWorkAlternatingSection />
