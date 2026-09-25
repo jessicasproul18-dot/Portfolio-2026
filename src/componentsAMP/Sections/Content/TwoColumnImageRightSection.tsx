@@ -571,7 +571,7 @@ export function TwoColumnImageRightSection({
               className={[
                 'space-y-8 md:col-start-2',
                 interactive
-                  ? 'order-4 md:order-none md:row-start-1 md:self-start'
+                  ? 'order-4 md:order-none md:row-start-1 md:self-center'
                   : 'md:row-start-1 md:self-center',
               ].join(' ')}
             >
