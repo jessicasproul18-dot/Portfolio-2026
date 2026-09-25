@@ -8,6 +8,7 @@ import ServiceWorkerRegister from "@/components/UI/ServiceWorkerRegister";
 import { Footer } from "@/components/Sections/Footer/Footer";
 import { Navigation } from "@/components/Sections/Navigation/Navigation";
 import { getSiteConfig } from "@/lib/siteConfig";
+import { Analytics } from "@vercel/analytics/next";
 
 export async function generateMetadata(): Promise<Metadata> {
   const siteConfig = await getSiteConfig();
@@ -92,6 +93,7 @@ export default async function RootLayout({
         <ScrollPosition />
         {children}
         <Footer siteConfig={siteConfig} />
+        <Analytics />
       </body>
     </html>
   );
