@@ -34,8 +34,8 @@ export function HomeScrollStage({ siteConfig }: HomeScrollStageProps) {
         imageAlt={HEADSHOT_ALT}
         revealCtaLabel="Contact"
         revealCtaHref="#contact"
-        revealSecondaryCtaLabel="Learn more"
-        revealSecondaryCtaHref="/about"
+        revealSecondaryCtaLabel="See portfolio"
+        revealSecondaryCtaHref="#work"
         className="pt-[calc(80px+3rem)] pb-[3rem] md:pt-[11rem] md:pb-[6rem]"
       />
 

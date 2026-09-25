@@ -9,7 +9,7 @@
  * CONTENT ELEMENTS: Interactive tile portrait or static headshot, optional eyebrow/body, dual CTAs
  * CONVERSION ROLE: Introduce the designer and drive to work or contact
  * IDEAL POSITION: Directly under the hero on the homepage, or under page header on about
- * NOTES / MODIFIERS: interactive prop (default true) toggles hover-reveal cover tiles/magnifier/ambient dots/cursor waves vs static aspect-[3/4] portrait; one base image under covers; click/tap/Enter/Space reveals all; optional reveal CTA when fully revealed; reduced-motion keeps click-to-reveal without hover chrome
+ * NOTES / MODIFIERS: interactive prop (default true) toggles hover-reveal cover tiles/magnifier/ambient dots/cursor waves vs static aspect-[3/4] portrait; one base image under covers; click/tap/Enter/Space reveals all; optional CTAs under the portrait always visible when provided; reduced-motion keeps click-to-reveal without hover chrome
  */
 
 import Image from 'next/image';
@@ -24,8 +24,6 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from 'react';
 import {
-  AnimatePresence,
-  motion,
   useMotionValue,
   useReducedMotion,
   useSpring,
@@ -91,10 +89,10 @@ export type TwoColumnImageRightSectionProps = {
   secondaryCtaLabel?: string;
   secondaryCtaHref?: string;
   secondaryCtaDownload?: boolean | string;
-  /** CTA shown under the portrait after the image is fully revealed */
+  /** CTA shown under the portrait (always visible when set) */
   revealCtaLabel?: string;
   revealCtaHref?: string;
-  /** Optional second CTA next to the reveal CTA */
+  /** Optional second CTA next to the primary CTA under the portrait */
   revealSecondaryCtaLabel?: string;
   revealSecondaryCtaHref?: string;
   /** Optional padding/spacing overrides for the inner section */
@@ -284,7 +282,7 @@ const HoverRevealPortrait = ({
         onClick={handleRevealAll}
         disabled={isFullyRevealed}
         className={[
-          'text-left text-xs font-semibold uppercase tracking-[0.22em] text-primary-600 transition-opacity duration-1000 ease-out md:col-start-1 md:row-start-1',
+          'order-1 text-left text-xs font-semibold uppercase tracking-[0.22em] text-primary-600 transition-opacity duration-1000 ease-out md:order-none md:col-start-1 md:row-start-2',
           isFullyRevealed
             ? 'cursor-default opacity-40'
             : 'cursor-pointer opacity-100 hover:text-primary-700',
@@ -292,6 +290,7 @@ const HoverRevealPortrait = ({
       >
         Click or hover over the photo to reveal
       </button>
+
       {/* Without JS, show the full photo instead of a stuck mosaic */}
       <noscript>
         <style>
@@ -302,7 +301,7 @@ const HoverRevealPortrait = ({
         ref={frameRef}
         data-reveal-frame
         className={[
-          'relative aspect-square w-full max-w-md overflow-hidden rounded-2xl bg-transparent md:col-start-1 md:row-start-2 md:max-w-lg',
+          'relative order-2 aspect-square w-full max-w-md overflow-hidden rounded-2xl bg-transparent md:order-none md:col-start-1 md:row-start-1 md:max-w-lg',
           !reduceMotion && isHovering ? 'cursor-none' : 'cursor-pointer',
         ].join(' ')}
         role="button"
@@ -423,53 +422,24 @@ const HoverRevealPortrait = ({
           ) : null}
       </div>
 
-      <div className="flex w-full max-w-md flex-col items-start md:col-start-1 md:row-start-3 lg:max-w-lg">
-        <AnimatePresence initial={false}>
-          {showRevealCtas && isFullyRevealed ? (
-            <motion.div
-              key="reveal-ctas"
-              initial={
-                reduceMotion ? false : { height: 0, opacity: 0 }
-              }
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={reduceMotion ? undefined : { height: 0, opacity: 0 }}
-              transition={{
-                duration: reduceMotion ? 0 : 0.45,
-                ease: [0.22, 0.82, 0.28, 1],
-              }}
-              className="w-full overflow-hidden"
-            >
-              <div className="flex flex-wrap items-center justify-start gap-3 md:gap-4">
-                <motion.div
-                  initial={reduceMotion ? false : { y: -16, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{
-                    duration: reduceMotion ? 0 : 0.4,
-                    delay: reduceMotion ? 0 : 0.06,
-                    ease: [0.22, 0.82, 0.28, 1],
-                  }}
-                  className="flex flex-wrap items-center justify-start gap-3 md:gap-4"
-                >
-                  {showRevealCta ? (
-                    <Button variant="primary" asChild size="sm">
-                      <Link href={revealCtaHref!}>
-                        <span>{revealCtaLabel}</span>
-                      </Link>
-                    </Button>
-                  ) : null}
-                  {showRevealSecondaryCta ? (
-                    <Button variant="primaryOutline" asChild size="sm">
-                      <Link href={revealSecondaryCtaHref!}>
-                        <span>{revealSecondaryCtaLabel}</span>
-                      </Link>
-                    </Button>
-                  ) : null}
-                </motion.div>
-              </div>
-            </motion.div>
+      {showRevealCtas ? (
+        <div className="order-3 flex w-full max-w-md flex-wrap items-center justify-start gap-3 md:order-none md:col-start-1 md:row-start-3 md:gap-4 lg:max-w-lg">
+          {showRevealCta ? (
+            <Button variant="primary" asChild size="sm">
+              <Link href={revealCtaHref!}>
+                <span>{revealCtaLabel}</span>
+              </Link>
+            </Button>
           ) : null}
-        </AnimatePresence>
-      </div>
+          {showRevealSecondaryCta ? (
+            <Button variant="primaryOutline" asChild size="sm">
+              <Link href={revealSecondaryCtaHref!}>
+                <span>{revealSecondaryCtaLabel}</span>
+              </Link>
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -601,10 +571,11 @@ export function TwoColumnImageRightSection({
               className={[
                 'space-y-8 md:col-start-2',
                 interactive
-                  ? 'md:row-start-2 md:self-start'
+                  ? 'order-4 md:order-none md:row-start-1 md:self-start'
                   : 'md:row-start-1 md:self-center',
               ].join(' ')}
-            >              <header>
+            >
+              <header>
                 {eyebrow ? (
                   <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-primary-600">
                     {eyebrow}
