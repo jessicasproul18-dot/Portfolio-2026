@@ -29,7 +29,7 @@ export function HomeScrollStage({ siteConfig }: HomeScrollStageProps) {
     <div className="relative flex min-h-screen w-full flex-col bg-white">
       <TwoColumnImageRightSection
         headingLine1="Hi, I'm Jess."
-        headingLine2="A product designer with 3 years of design experience, grounded in UX design and front-end development."
+        headingLine2="A product designer with 3 years of design experience, from graphic design and branding to UX and front-end development."
         imageSrc={HEADSHOT_SRC}
         imageAlt={HEADSHOT_ALT}
         revealCtaLabel="Contact"

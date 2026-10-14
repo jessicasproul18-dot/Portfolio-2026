@@ -178,13 +178,15 @@ export function ProjectCaseStudySection({ project }: ProjectCaseStudySectionProp
       (project.processImages && project.processImages.length > 0) ||
       (project.processSideImages && project.processSideImages.length > 0),
   );
+  const hasFutureTesting = Boolean(project.futureTesting);
   const isStructuredCaseStudy = Boolean(
     project.problem ||
       project.process ||
       project.approach ||
       (project.beforeImages && project.beforeImages.length > 0) ||
       hasFinalSite ||
-      (project.videos && project.videos.length > 0),
+      (project.videos && project.videos.length > 0) ||
+      hasFutureTesting,
   );
 
   const sectionNavItems: SectionNavItem[] = [
@@ -208,6 +210,12 @@ export function ProjectCaseStudySection({ project }: ProjectCaseStudySectionProp
     sectionNavItems.push({
       id: 'project-videos-heading',
       label: project.videosHeading ?? 'Motion',
+    });
+  }
+  if (hasFutureTesting) {
+    sectionNavItems.push({
+      id: 'project-future-testing-heading',
+      label: project.futureTestingHeading ?? 'What I would test',
     });
   }
   if (!isStructuredCaseStudy && project.sections) {
@@ -688,6 +696,17 @@ export function ProjectCaseStudySection({ project }: ProjectCaseStudySectionProp
                 </article>
               );
             })}
+          </div>
+        ) : null}
+
+        {hasFutureTesting ? (
+          <div className="space-y-4">
+            <SectionHeadingWithNextNav id="project-future-testing-heading" items={sectionNavItems}>
+              {project.futureTestingHeading ?? 'What I would test'}
+            </SectionHeadingWithNextNav>
+            <p className="text-base font-light leading-relaxed text-zinc-800 md:text-lg">
+              {project.futureTesting}
+            </p>
           </div>
         ) : null}
 

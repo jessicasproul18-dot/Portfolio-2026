@@ -90,6 +90,12 @@ export type Project = {
   coverBackgroundClass?: string;
   /** When true, hides the jump-nav under the cover image. */
   hideSectionNav?: boolean;
+  /**
+   * Optional section for planned usability validation when live testing
+   * was not part of the delivered scope.
+   */
+  futureTestingHeading?: string;
+  futureTesting?: string;
 };
 
 export const projects: Project[] = [
@@ -227,17 +233,19 @@ export const projects: Project[] = [
     focus: [
       'Design early product flows that reduce the self-promotion burden for musicians',
       'Support product testing and user interviews with artists',
+      'Stagger onboarding so artists reach the product faster',
       'Build testable prototypes in Figma',
       'Establish brand colors, typography, and reusable UI patterns',
     ],
     problem:
       'Early-career musicians struggle most with self-promotion. They rarely have budget for a marketing team, and discovery depends heavily on social media, yet most would rather spend that time writing music. Most marketing tools are not specialized to support the kind of platform and fanbase early musicians need to grow.',
     process:
-      'As the only UX/UI designer for eight months, I used musician interview insights to frame tools that support promotion without turning artists into full-time content creators. I designed early dashboard, fan management, analytics, Biolink, onboarding, login, and landing flows, supported interviews and Biolink testing, and set brand color, type, and component patterns.',
+      'As the only UX/UI designer for eight months, I used musician interview insights to frame tools that support promotion without turning artists into full-time content creators. Early product testing showed artists did not want to answer long question flows before they could reach the platform, so we staggered information gathering across onboarding and later product moments instead of front-loading everything. I designed early dashboard, fan management, analytics, Biolink, onboarding, login, and landing flows, supported interviews and Biolink testing, and set brand color, type, and component patterns.',
     approach:
-      'A public Biolink pairs with Tunepage tools for marketing, fans, and performance so artists share work and track growth in one place. Dashboard, analytics, and fan screens push clear next actions instead of generic marketing busywork.',
+      'A public Biolink pairs with Tunepage tools for marketing, fans, and performance so artists share work and track growth in one place. Onboarding asks only what is needed to get started, then gathers more profile and setup details as artists explore the product. Dashboard, analytics, and fan screens push clear next actions instead of generic marketing busywork.',
     outcomes: [
       'Turned musician interview insights into early product screens artists could test.',
+      'Shortened the path into the product by staggering onboarding questions after early testing feedback.',
       'Gave promotion, fans, and performance a shared home in Biolink and Tunepage.',
       'Set reusable brand and UI patterns for the early product.',
     ],
@@ -420,7 +428,7 @@ export const projects: Project[] = [
     summary:
       'Designed a self-service kiosk for Bowlsome Smoothie so people can build a custom bowl and check out without waiting in line.',
     description:
-      'Bowlsome Smoothie is built around customizable smoothie bowls. The project was an in-store self-service kiosk so customers can order on their own. I designed the flow for a 2304 by 1632 kiosk screen, from opening through size, ingredients, toppings, cart, payment, and confirmation. That included the brand system, wireframes, high-fidelity screens, and a usability testing plan for the prototype.',
+      'Bowlsome Smoothie is built around customizable smoothie bowls. The project was an in-store self-service kiosk so customers can order on their own. I designed the flow for a 2304 by 1632 kiosk screen, from opening through size, ingredients, toppings, cart, payment, and confirmation. That included the brand system, wireframes, high-fidelity screens, and design decisions aimed at reach and readability on a shared kiosk.',
     role: 'UX/UI designer',
     tools: ['Figma'],
     year: '2025',
@@ -429,19 +437,22 @@ export const projects: Project[] = [
       'Keep the experience fast for busy customers without cutting customization',
       'Follow the client brief on reach, contrast, and readable text',
       'Set up color, type, spacing, and reusable UI pieces',
-      'Write a usability test around a real ordering scenario',
+      'Plan what I would validate next in usability testing',
     ],
     problem:
       'Customers want customizable smoothie bowls, but waiting in line slows the process, so the kiosk had to stay fast without cutting customization or accessibility.',
     process:
-      'From the client brief, use case, and user stories, I mapped the order flow, then wireframed opening, choosing, and checkout for the 2304 by 1632 kiosk. I expanded the given colors (#374B4A, #0CCA4A), chose Krub, and built spacing, buttons, cards, and fields on an 8px base with enough contrast around actions. I also wrote a usability script for a full order back to the start screen.',
+      'From the client brief, use case, and user stories, I mapped the order flow, then wireframed opening, choosing, and checkout for the 2304 by 1632 kiosk. I expanded the given colors (#374B4A, #0CCA4A), chose Krub, and built spacing, buttons, cards, and fields on an 8px base with enough contrast around actions. Primary controls were placed lower on the screen with reach in mind, especially for wheelchair users.',
     approach:
       'Screens move from bowl size through ingredients, add-ins, toppings, review, cart, payment, and confirmation, with a quicker path alongside full customization. Ingredient cards leave room for calories and allergens. Primary actions sit lower for reach, and review and cart keep totals and edit controls visible before pay.',
     outcomes: [
       'Delivered a full self-serve order flow from start through confirmation.',
       'Met the brief’s accessibility needs for reach, contrast, and readable text.',
-      'Left a reusable UI system and a script to test a real ordering scenario.',
+      'Left a reusable UI system ready for kiosk prototyping and future testing.',
     ],
+    futureTestingHeading: 'What I would test',
+    futureTesting:
+      'I did not run live usability testing on this project, but I would validate a few decisions before a store rollout. First, the checkout path: can a first-time customer move from cart to payment to confirmation without help, and where do people hesitate on totals, edits, or payment? Second, my reach hypothesis: I placed the most important actions toward the bottom of the screen so the ordering software would stay usable for wheelchair users and others with limited vertical reach. I would test whether that placement actually helps, or whether people look for those controls higher on a large kiosk display. I would also watch whether customization stays fast enough for a busy line, and whether calorie and allergen details on ingredient cards are noticed when they matter.',
     finalWorkHeading: 'Final screens',
     finalSiteColumns: 2,
     hideOverviewSummary: true,
