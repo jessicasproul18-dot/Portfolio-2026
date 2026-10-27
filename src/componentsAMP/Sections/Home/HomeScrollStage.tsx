@@ -6,10 +6,10 @@
  * BEST FOR: Portfolio landing page
  * VISUAL STYLE: Modern, minimal, and clean
  * LAYOUT: Stacked sections with 6rem vertical padding each
- * CONTENT ELEMENTS: About with interactive hover-reveal headshot as hero, alternating featured work, LinkedIn contact
+ * CONTENT ELEMENTS: About with static headshot as hero, alternating featured work, LinkedIn contact
  * CONVERSION ROLE: Guide from first impression through work into contact
  * IDEAL POSITION: Root of the homepage
- * NOTES / MODIFIERS: About section opens the page in place of a separate hero; interactive portrait on homepage; each block uses py-[6rem] (hero uses nav clearance + matched vertical padding)
+ * NOTES / MODIFIERS: About section opens the page in place of a separate hero; static square portrait; each block uses py-[6rem] (hero uses nav clearance + matched vertical padding)
  */
 
 import { TwoColumnImageRightSection } from '@/componentsAMP/Sections/Content/TwoColumnImageRightSection';
@@ -32,6 +32,7 @@ export function HomeScrollStage({ siteConfig }: HomeScrollStageProps) {
         headingLine2="A product designer with 3 years of design experience, from graphic design and branding to UX and front-end development."
         imageSrc={HEADSHOT_SRC}
         imageAlt={HEADSHOT_ALT}
+        interactive={false}
         revealCtaLabel="Contact"
         revealCtaHref="#contact"
         revealSecondaryCtaLabel="See portfolio"

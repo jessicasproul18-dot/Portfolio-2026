@@ -9,7 +9,7 @@
  * CONTENT ELEMENTS: Interactive tile portrait or static headshot, optional eyebrow/body, dual CTAs
  * CONVERSION ROLE: Introduce the designer and drive to work or contact
  * IDEAL POSITION: Directly under the hero on the homepage, or under page header on about
- * NOTES / MODIFIERS: interactive prop (default true) toggles hover-reveal cover tiles/magnifier/ambient dots/cursor waves vs static aspect-[3/4] portrait; one base image under covers; click/tap/Enter/Space reveals all; optional CTAs under the portrait always visible when provided; reduced-motion keeps click-to-reveal without hover chrome
+ * NOTES / MODIFIERS: interactive prop (default true) toggles hover-reveal mosaic vs static square portrait; optional CTAs under the portrait when provided
  */
 
 import Image from 'next/image';
@@ -105,21 +105,19 @@ type StaticPortraitProps = {
 };
 
 const StaticPortrait = ({ imageSrc, imageAlt }: StaticPortraitProps) => (
-  <div className="flex w-full max-w-md flex-col items-center md:items-start lg:max-w-lg">
-    <div
-      data-reveal-frame
-      className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-secondary-950"
-    >
-      <Image
-        alt={imageAlt}
-        src={imageSrc}
-        quality={80}
-        fill
-        priority
-        sizes="(min-width: 1024px) 32rem, (min-width: 768px) 28rem, 100vw"
-        className="rounded-2xl object-cover object-top"
-      />
-    </div>
+  <div
+    data-reveal-frame
+    className="relative aspect-square w-full overflow-hidden rounded-2xl bg-secondary-950"
+  >
+    <Image
+      alt={imageAlt}
+      src={imageSrc}
+      quality={80}
+      fill
+      priority
+      sizes="(min-width: 1024px) 32rem, (min-width: 768px) 28rem, 100vw"
+      className="rounded-2xl object-cover object-center"
+    />
   </div>
 );
 
@@ -486,7 +484,7 @@ export function TwoColumnImageRightSection({
 
   const handlePointerMove = useCallback(
     (event: ReactPointerEvent<HTMLDivElement>) => {
-      if (reduceMotion || !interactive) return;
+      if (reduceMotion) return;
       const el = sectionRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
@@ -498,7 +496,7 @@ export function TwoColumnImageRightSection({
       if (rafRef.current != null) return;
       rafRef.current = window.requestAnimationFrame(flushPointer);
     },
-    [flushPointer, interactive, reduceMotion],
+    [flushPointer, reduceMotion],
   );
 
   useEffect(() => {
@@ -521,17 +519,13 @@ export function TwoColumnImageRightSection({
       ref={sectionRef}
       id="about"
       className="relative scroll-mt-24 w-full overflow-x-clip bg-[#f3f2f5]"
-      onPointerMove={interactive ? handlePointerMove : undefined}
+      onPointerMove={handlePointerMove}
     >
-      {interactive ? (
-        <>
-          <AboutWaveBackground
-            mouseX={mouseX}
-            mouseY={mouseY}
-            reduceMotion={reduceMotion}
-          />
-        </>
-      ) : null}
+      <AboutWaveBackground
+        mouseX={mouseX}
+        mouseY={mouseY}
+        reduceMotion={reduceMotion}
+      />
 
       <section
         className={[
@@ -563,6 +557,25 @@ export function TwoColumnImageRightSection({
           ) : (
             <div className="relative w-full max-w-md md:col-start-1 md:row-start-1 lg:max-w-lg">
               <StaticPortrait imageSrc={imageSrc} imageAlt={imageAlt} />
+              {(revealCtaLabel && revealCtaHref) ||
+              (revealSecondaryCtaLabel && revealSecondaryCtaHref) ? (
+                <div className="flex flex-wrap items-center justify-start gap-3 pt-4 md:gap-4">
+                  {revealCtaLabel && revealCtaHref ? (
+                    <Button variant="primary" asChild size="sm">
+                      <Link href={revealCtaHref}>
+                        <span>{revealCtaLabel}</span>
+                      </Link>
+                    </Button>
+                  ) : null}
+                  {revealSecondaryCtaLabel && revealSecondaryCtaHref ? (
+                    <Button variant="primaryOutline" asChild size="sm">
+                      <Link href={revealSecondaryCtaHref}>
+                        <span>{revealSecondaryCtaLabel}</span>
+                      </Link>
+                    </Button>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           )}
 
